@@ -13,48 +13,30 @@ class Pong{
     this.scoreJ2 = '0';
   }
 
-  // Si cookie null activer animation h1 + animInputPlayer + animButtonStart et localStorage.setItem
 
   init(){
-    console.log('init ' + sessionStorage.getItem('cookieAnim'));
-    sessionStorage.setItem('cookieAnim', false);
     this.animInputPlayer();
     this.animButtonStart();
     this.keyButton();
     this.errorMsgInput();
+    sessionStorage.setItem('cookieAnim', true);
   }
 
   animInputPlayer(){
-
-    console.log('Haut funct ' + sessionStorage.getItem('cookieAnim'));
     
-    if(sessionStorage.getItem('cookieAnim') === 'false'){
+    if(sessionStorage.getItem('cookieAnim') === null){ 
       this.contentInput.style.animationName = 'animPlayerBox';
       setTimeout(() => {
         this.contentInput.style.visibility = 'visible';
         this.contentInput.style.opacity = 1;
       }, 2000);
 
-      // sessionStorage.setItem('cookieAnim', true);
-      console.log('Dans funct ' + sessionStorage.getItem('cookieAnim'));
+      console.log(sessionStorage.getItem('cookieAnim'));
     }else{
-      console.log('Dans else');
+      this.contentInput.style.visibility = 'visible';
+      this.contentInput.style.opacity = 1;
+      this.contentInput.style.animationDelay = '0';
     }
-    
-
-    // if(this.cookieAnim === 'false'){ // Test cookie
-      // this.contentInput.style.animationName = 'animPlayerBox';
-      // setTimeout(() => {
-      //   this.contentInput.style.visibility = 'visible';
-      //   this.contentInput.style.opacity = 1;
-      // }, 2000);
-
-      // localStorage.setItem('cookieAnim', true);
-    // }else{
-      // this.contentInput.style.visibility = 'visible';
-      // this.contentInput.style.opacity = 1;
-      // this.contentInput.style.animationDelay = '0';
-    // }
 
   }
 
