@@ -1,0 +1,411 @@
+@import url('https://fonts.googleapis.com/css2?family=Changa:wght@200&family=Lato:wght@100&family=Playfair+Display&display=swap');
+
+html{
+  margin:0;
+  height:100%;
+}
+
+body{
+  background-color: black;
+  font-family: 'Changa', sans-serif;
+  margin:0;
+  padding:0;
+  height:100%;
+}
+
+#changeStateButKey{
+  height:100%;
+}
+
+h1{
+  color:white;
+  text-align: center;
+  margin:0;
+  font-size:90px;
+  opacity: 1;
+  animation-name: animTitle;
+  animation-duration: 3s;
+  animation-timing-function:ease-in;
+  height: fit-content;
+}
+
+#contentInput{
+  width:850px;
+  height:350px;
+  display:flex;
+  justify-content:space-evenly;
+  margin:80px auto 0;
+  position:relative;
+  bottom:50px;
+  animation-duration: 2s;
+  animation-delay: 2s;
+  opacity: 0;
+  visibility: hidden;
+  perspective: 50px;
+  flex-wrap: wrap;
+}
+
+.card1{
+  background-color: #0000ff8f;
+  width:350px;
+  height:300px;
+  position:relative;
+  transform-style: preserve-3d;
+  z-index: 1;
+}
+
+.leftBorder{
+  height:296px;
+  width:40px;
+  background: linear-gradient(#0f0fa5c0, #0f0fa59f);
+  position:absolute;
+  transform:translateX(-32px) translateY(18px) rotateY(-3deg) skewY(-40deg);
+}
+
+.bottomBorder{
+  width:345px;
+  height:34px;
+  background: linear-gradient(to left, #0f0fa58a, #0f0fa554);
+  position: absolute;
+  transform: translate(-12.2px, 297px) rotateX(-3deg) skewX(-48.5deg);
+}
+
+.card2{
+  background-color: #ff00006c;
+  width:350px;
+  height:300px;
+  position:relative;
+  transform-style: preserve-3d;
+  z-index: 1;
+}
+
+.leftBorder2{
+  height:294px;
+  width:40px;
+  background: linear-gradient(#aa0d0d5b, #aa0d0d34);
+  position:absolute;
+  transform: translate(342px, 19px) rotateY(3deg) skewY(40deg);
+}
+
+.bottomBorder2{
+  width:345px;
+  height:34px;
+  background: linear-gradient(to left,#aa0d0d48, #aa0d0d54);
+  position: absolute;
+  transform: translate(18px, 297px) rotateX(-3deg) skewX(48.5deg);
+}
+
+
+.card1>p:nth-of-type(1){
+  font-size: 60px;
+  font-weight: bold;
+  color:#0059ff;
+  height:fit-content;
+  text-align: center;
+  margin:0;
+}
+
+.card2>p:nth-of-type(1){
+  font-size: 60px;
+  font-weight: bold;
+  color:red;
+  height:fit-content;
+  text-align: center;
+  margin:0;
+}
+
+#j1{
+  width:200px;
+  height:40px;
+  font-size: 20px;
+  color:#0059ff;
+  text-align: center;
+  display: block;
+  margin:auto;
+}
+
+#j2{
+  width:200px;
+  height:40px;
+  font-size: 20px;
+  color:red;
+  text-align: center;
+  display: block;
+  margin:auto;
+}
+
+#buttonStart{
+  color:white;
+  text-align: center;
+  width: 275px;
+  height:110px;
+  padding: 10px 30px;
+  font-size:40px;
+  margin:auto;
+  border: 8px solid white;
+  border-radius:30px;
+  opacity: 0;
+  visibility: hidden;
+  position: relative;
+  box-sizing: border-box;
+  animation-fill-mode: forwards;
+  animation-duration: 2s;
+  animation-timing-function: cubic-bezier(0.5, -0.2, 0.5, 1.0);
+  display: flex;
+  z-index:1;
+}
+
+#buttonStart> span::selection, 
+#buttonKey> span::selection,
+#buttonKey> img::selection,
+#buttonKey::selection{
+  background-color: inherit;
+}
+
+#buttonKey{
+  width: 95px;
+  height:55px;
+  font-size: 30px;
+  padding:10px;
+  border:8px outset white;
+  border-radius: 20px;
+  position: absolute;
+  right:50px;
+  bottom:50px;
+  opacity: 0;
+  visibility: hidden;
+  cursor: pointer;
+  color:white;
+  display: flex;
+  z-index:0;
+  transition-duration: 1s;
+}
+
+#iconArcade{
+  width:40px;
+  height:40px;
+  background: center/cover url('icon/arcadeWhite.png');
+  align-self: center;
+}
+
+/*** Create in js ***/
+#errorMsg{
+  color:red;
+  text-align: center;
+  font-size:23px;
+  font-weight: bold;
+  margin:0;
+  padding:0;
+}
+
+#errorMsg::selection{
+  background-color: #0000ff8f;
+}
+
+.contentKeyJ1{
+  background-color: #0000ff8f;
+  width:90px;
+  height:0;
+  position: absolute;
+  left:40px;
+  opacity: 0;
+  visibility: hidden;
+  transition-duration: 1s;
+  margin-top:100px;
+}
+
+.contentKeyJ2{
+  background-color: #ff00006c;
+  width:90px;
+  height:0;
+  position: absolute;
+  right:40px;
+  opacity: 0;
+  visibility: hidden;
+  transition-duration: 1s;
+  margin-top:100px;
+}
+
+.titleKeyJ1{
+  margin-top: 15px;
+  margin-bottom:10px;
+  padding: 0;
+  text-align: center;
+  color:#0059ff;
+  font-weight: bold;
+}
+
+.titleKeyJ2{
+  margin-top: 15px;
+  margin-bottom:10px;
+  padding: 0;
+  text-align: center;
+  color:red;
+  font-weight: bold
+}
+
+.keyZ, .keyS, .keyUp, .keyDown{
+  width:50px;
+  height:50px;
+  margin: auto;
+  background-color: white;
+  background: linear-gradient(220deg, rgba(170, 170, 170, 0.7), rgba(255, 255, 255, 0.8)),
+              linear-gradient(0deg, rgba(170, 170, 170, 0.7), rgba(255, 255, 255, 0.5));
+  font-size:30px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 4px 4px 0 0 #888888;
+  margin-bottom:6px;
+  display:none;
+}
+
+.margeLKeyZ{
+  margin-left:40px;
+}
+
+.margeRKeyS{
+  margin-right:40px;
+}
+
+#middleLine{
+  width:0.1px;
+  height:100%;
+  border-left: 2px dashed white;
+  position:absolute;
+  margin-left:50%;
+}
+
+#contentNameScore{
+  display:flex;
+  justify-content: space-around;
+  width:100%;
+  height:fit-content;
+  opacity:0;
+  transition-duration : 1s;
+}
+
+#nameJ1, #nameJ2{
+  padding:0;
+  margin:0;
+}
+
+#scoreJ1{
+  color:#0066ff;
+}
+
+#scoreJ2{
+  color:#ff0000;
+}
+
+#ball{
+  width:30px;
+  height:30px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  left:300px;
+  top:150px;
+  opacity: 0;
+  transition-duration: 0.5s;
+}
+
+#plateJ1{
+  background-color: white;
+  height:150px;
+  width:15px;
+  position: absolute;
+  left:5%;
+  top:300px;
+  opacity:0;
+  visibility: hidden;
+  transition-duration: 0.5s;
+}
+
+#plateJ2{
+  background-color: white;
+  height:150px;
+  width:15px;
+  position: absolute;
+  right:5%;
+  top:500px;
+  opacity: 0;
+  visibility:hidden;
+  transition-duration: 0.5s;
+}
+
+#timerCountdown{
+  color:#c5c5c5;
+  position:absolute;
+  font-size:200px;
+  width: 100%;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
+
+/********/
+
+@keyframes animTitle{
+  from{
+    font-size:80px;
+    opacity: 0;
+  }
+
+  to{
+    font-size: 90px;
+    opacity: 1;
+  }
+}
+
+@keyframes animPlayerBox{
+  from{
+    bottom:0;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to{
+    bottom:50px;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes animKey{
+  from{
+    margin-top:100px;
+  }
+
+  to{
+    margin-top:30px;
+  }
+}
+
+@keyframes animButtonStart{
+  from{
+    bottom:100px;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  to{
+    bottom:40px;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+/*** Start game ***/
+@keyframes boardZoomStart{
+  from{
+    width: 275px;
+    height:110px;
+  }
+
+  to{
+    width:100%;
+    height:100%;
+    bottom:595px;
+    border-radius: 0px;
+  }
+}
