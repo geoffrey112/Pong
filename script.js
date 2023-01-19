@@ -13,8 +13,10 @@ class Pong{
     this.scoreJ2 = '0';
   }
 
+  // Si cookie null activer animation animButtonStart
 
   init(){
+    this.animTitle();
     this.animInputPlayer();
     this.animButtonStart();
     this.keyButton();
@@ -22,22 +24,27 @@ class Pong{
     sessionStorage.setItem('cookieAnim', true);
   }
 
+  animTitle(){
+    const title = document.querySelector('h1');
+
+    if(sessionStorage.getItem('cookieAnim') === null){
+      title.style.animationName = 'animTitle';
+    }
+  }
+
   animInputPlayer(){
     
-    if(sessionStorage.getItem('cookieAnim') === null){ 
+    if(sessionStorage.getItem('cookieAnim') === null){
       this.contentInput.style.animationName = 'animPlayerBox';
       setTimeout(() => {
         this.contentInput.style.visibility = 'visible';
         this.contentInput.style.opacity = 1;
       }, 2000);
-
-      console.log(sessionStorage.getItem('cookieAnim'));
     }else{
+      this.contentInput.style.animationDelay = '0';
       this.contentInput.style.visibility = 'visible';
       this.contentInput.style.opacity = 1;
-      this.contentInput.style.animationDelay = '0';
     }
-
   }
 
   animButtonStart(){
@@ -45,9 +52,12 @@ class Pong{
     const txtButton = document.querySelector('#buttonStart>span');
 
     setTimeout(() => { 
-      this.buttonStart.style.visibility = 'visible';
-      this.buttonStart.style.opacity = 1;
-      this.buttonStart.style.animationName = 'animButtonStart';
+      // if(sessionStorage.getItem('cookieAnim' === null)){
+        this.buttonStart.style.animationName = 'animButtonStart';
+        this.buttonStart.style.visibility = 'visible';
+        this.buttonStart.style.opacity = 1;
+      // }
+      // console.log(sessionStorage.getItem('cookieAnim'));
       this.buttonStart.style.animationDuration = '2s';
       this.buttonStart.style.bottom = '40px';
     }, 2500);

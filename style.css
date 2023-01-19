@@ -23,7 +23,6 @@ h1{
   margin:0;
   font-size:90px;
   opacity: 1;
-  animation-name: animTitle;
   animation-duration: 3s;
   animation-timing-function:ease-in;
   height: fit-content;
