@@ -177,7 +177,6 @@ h1{
   color:white;
   display: flex;
   z-index:0;
-  transition-duration: 1s;
 }
 
 #iconArcade{

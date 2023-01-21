@@ -13,8 +13,6 @@ class Pong{
     this.scoreJ2 = '0';
   }
 
-  // Si cookie null activer animation animButtonStart
-
   init(){
     this.animTitle();
     this.animInputPlayer();
@@ -51,17 +49,21 @@ class Pong{
 
     const txtButton = document.querySelector('#buttonStart>span');
 
-    setTimeout(() => { 
-      // if(sessionStorage.getItem('cookieAnim' === null)){
+    if(sessionStorage.getItem('cookieAnim') === null){
+      setTimeout(() => { 
         this.buttonStart.style.animationName = 'animButtonStart';
         this.buttonStart.style.visibility = 'visible';
         this.buttonStart.style.opacity = 1;
-      // }
-      // console.log(sessionStorage.getItem('cookieAnim'));
-      this.buttonStart.style.animationDuration = '2s';
-      this.buttonStart.style.bottom = '40px';
-    }, 2500);
+      }, 2500);
+    }else{
+      this.buttonStart.style.visibility = 'visible';
+      this.buttonStart.style.opacity = 1;
+    }
 
+    this.buttonStart.style.animationDuration = '2s';
+    this.buttonStart.style.bottom = '40px';
+
+      
     this.buttonStart.addEventListener('pointerdown', () => {
       if(this.isClickStart === false){
         this.buttonStart.style.backgroundColor = 'white';
@@ -154,13 +156,19 @@ class Pong{
     keyDown.innerText = '↓';
 
     // Display button
-    setTimeout(() => {
-      this.buttonKey.style.opacity = 1;
+    if(sessionStorage.getItem('cookieAnim') === null){
+      setTimeout(() => {
+        this.buttonKey.style.transitionDuration = '1s';
+        this.buttonKey.style.opacity = 1;
+        this.buttonKey.style.visibility = 'visible';
+        this.buttonKey.style.color = 'white';
+      },4000);
+    }else{
       this.buttonKey.style.visibility = 'visible';
-      this.buttonKey.style.color = 'white';
-    },4000);
+      this.buttonKey.style.opacity = 1;
+    }
     
-    // Change design button 
+    // Change design button (hover)
     this.buttonKey.addEventListener('mouseenter', () => {
       if(isClickButKey === false){
         this.buttonKey.style.transitionDuration = '0s';
