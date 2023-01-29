@@ -1,6 +1,6 @@
 class Pong{
   constructor(){
-    this.isClickStart = false;
+    this.startGameStatus = false;
     this.contentInput = document.getElementById('contentInput');
     this.buttonStart = document.getElementById('buttonStart');
     this.inputJ1 = document.getElementById('j1');
@@ -11,7 +11,13 @@ class Pong{
     this.ball = document.createElement('div'); // Absolute
     this.scoreJ1 = '0';
     this.scoreJ2 = '0';
+    
   }
+
+  // Verify input box (regex empty)
+  // Add Score
+  // Move ball
+  // Collision
 
   init(){
     this.animTitle();
@@ -37,7 +43,7 @@ class Pong{
       setTimeout(() => {
         this.contentInput.style.visibility = 'visible';
         this.contentInput.style.opacity = 1;
-      }, 2000);
+      }, 2000); 
     }else{
       this.contentInput.style.animationDelay = '0';
       this.contentInput.style.visibility = 'visible';
@@ -65,7 +71,7 @@ class Pong{
 
       
     this.buttonStart.addEventListener('pointerdown', () => {
-      if(this.isClickStart === false){
+      if(this.startGameStatus === false){
         this.buttonStart.style.backgroundColor = 'white';
         this.buttonStart.style.color = 'black';
         this.buttonStart.style.borderTop = '8px solid #999999';
@@ -78,7 +84,7 @@ class Pong{
     });
 
     this.buttonStart.addEventListener('mouseenter', () => {
-      if(this.isClickStart === false){
+      if(this.startGameStatus === false){
         this.buttonStart.style.color = 'black';
         this.buttonStart.style.backgroundColor = 'white';
         this.buttonStart.style.borderRight = '8px solid #999999';
@@ -88,7 +94,7 @@ class Pong{
     });
 
     this.buttonStart.addEventListener('mouseleave', () => {
-      if(this.isClickStart === false){
+      if(this.startGameStatus === false){
         this.buttonStart.style.color = 'white';
         this.buttonStart.style.backgroundColor = 'black';
         this.buttonStart.style.borderRight = '8px solid white';
@@ -101,7 +107,7 @@ class Pong{
 
     this.buttonStart.addEventListener('click', () => {
 
-      if(this.isClickStart === false && this.inputJ1.value !== '' && this.inputJ2.value !== '' && this.inputJ1.value !== ' ' && this.inputJ2.value !== ' '){
+      if(this.startGameStatus === false && this.inputJ1.value !== '' && this.inputJ2.value !== '' && this.inputJ1.value !== ' ' && this.inputJ2.value !== ' '){
         this.buttonStart.style.backgroundColor = 'black';
         this.buttonStart.style.borderTop = '8px solid white';
         this.buttonStart.style.borderLeft = '8px solid white';
@@ -109,9 +115,8 @@ class Pong{
         this.buttonStart.style.padding = 0;
         this.buttonStart.style.color = 'white';
         document.querySelector('#buttonStart > span').remove();
-        this.isClickStart = true;
         this.startGame();
-      }else if(this.isClickStart === false && (this.inputJ1.value === '' && this.inputJ2.value === '') || 
+      }else if(this.startGameStatus === false && (this.inputJ1.value === '' && this.inputJ2.value === '') || 
       (this.inputJ1.value === '' || this.inputJ2.value === '') || (this.inputJ1.value === ' ' && this.inputJ2.value === ' ') ||
       (this.inputJ1.value === ' ' || this.inputJ2.value === ' ')){
         this.buttonStart.style.borderRight = '8px solid #999999';
@@ -367,6 +372,7 @@ class Pong{
     this.plateJ1.id = 'plateJ1';
     this.plateJ2.id = 'plateJ2';
     this.ball.id = 'ball';
+    this.startGameStatus = true;
 
     setTimeout(() => {
       this.buttonStart.style.animationName = 'boardZoomStart';
@@ -418,63 +424,46 @@ class Pong{
       }else{
         timer.remove();
         clearInterval(interval);
+        this.movePlayers();
       }
     }, 1000);
-
-
-  }
-  
-}
-
-class Process extends Pong{
-  constructor(){
-    super();
-    // Move players
-    // Verify input box (regex empty)
-    // Add Score
-    // Move ball
-    // Collision
-    // Cookie pour animIntro
-    
-    // Faire compte à rebours dans class Pong + movePlayers dans Process
-  }
-
-  init(){
-    // this.score();
-    this.movePlayers();
   }
 
   movePlayers(){
+
     const body = document.body;
-    
+
+    let moveY = 300;
+    const gameBoardHeight = this.buttonStart.clientHeight; // 921
+
     // Player1
     body.addEventListener('keydown', (e) => {
-      // Condition si isClick = true (déplacer isClick de animButtonStart)
-      if(e.key === 'z'){
-        console.log('z');
-
-      }else if(e.key === 's'){
-        console.log('s');
-
+      if(e.key === 'z' && moveY > 0){
+        this.plateJ1.style.transitionDuration = '0s';
+        moveY -= 15;
+        this.plateJ1.style.top = `${moveY}px`;
+        console.log(moveY);
+        console.log(borderBottomPlateJ1);
+      }else if(e.key === 's' && moveY ){
+        this.plateJ1.style.transitionDuration = '0s';
+        moveY += 15;
+        this.plateJ1.style.top = `${moveY}px`;
+        console.log(moveY);
       }
+
     });
+
+
+    // Player2
+    
+
   }
-  
-  score(){
-    // console.log(typeof this.scoreJ1);
-  }
+
   
 }
 
 
-
-let display = new Pong();
-display.init();
-
-let process = new Process();
-process.init();
-
-
-
+let pong = new Pong();
+pong.init();
 
 
