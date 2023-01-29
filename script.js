@@ -6,12 +6,28 @@ class Pong{
     this.inputJ1 = document.getElementById('j1');
     this.inputJ2 = document.getElementById('j2');
     this.buttonKey = document.getElementById('buttonKey');
-    this.plateJ1 = document.createElement('div'); // Absolute
-    this.plateJ2 = document.createElement('div'); // Absolute
+    this.plateJ1 = {
+      elem: document.createElement('div'),
+      id: 'plateJ1',
+      opacity: 1,
+      visibility: 'visible',
+      moveY: 300, // Border top
+      borderBottom: null
+    };
+
+    this.plateJ2 = {
+      elem: document.createElement('div'),
+      id: 'plateJ2',
+      opacity: 1,
+      visibility: 'visible',
+      moveY: 300,
+      borderBottom: null
+    };
+
     this.ball = document.createElement('div'); // Absolute
     this.scoreJ1 = '0';
     this.scoreJ2 = '0';
-    
+
   }
 
   // Verify input box (regex empty)
@@ -369,8 +385,8 @@ class Pong{
     elemScoreJ1.innerText = `${this.scoreJ1}`;
     elemScoreJ2.innerText = `${this.scoreJ2}`;
     contentNameScore.id = 'contentNameScore';
-    this.plateJ1.id = 'plateJ1';
-    this.plateJ2.id = 'plateJ2';
+    this.plateJ1.elem.id = this.plateJ1.id;
+    this.plateJ2.elem.id = this.plateJ2.id;
     this.ball.id = 'ball';
     this.startGameStatus = true;
 
@@ -394,16 +410,16 @@ class Pong{
 
       this.buttonStart.style.top = '0';
       contentNameScore.style.opacity = 0.8;
-      this.buttonStart.append(this.plateJ1);
-      this.buttonStart.append(this.plateJ2);
+      this.buttonStart.append(this.plateJ1.elem);
+      this.buttonStart.append(this.plateJ2.elem);
       this.buttonStart.append(this.ball);
     },3000);
 
     setTimeout(() => {
-      this.plateJ1.style.opacity = 1;
-      this.plateJ1.style.visibility = 'visible';
-      this.plateJ2.style.opacity = 1;
-      this.plateJ2.style.visibility = 'visible';
+      this.plateJ1.elem.style.opacity = this.plateJ1.opacity;
+      this.plateJ1.elem.style.visibility = this.plateJ1.visibility;
+      this.plateJ2.elem.style.opacity = this.plateJ2.opacity;
+      this.plateJ2.elem.style.visibility = this.plateJ2.visibility;
       this.ball.style.opacity = 1;
       this.countdown();
     }, 3050);
@@ -432,23 +448,23 @@ class Pong{
   movePlayers(){
 
     const body = document.body;
-
-    let moveY = 300;
     const gameBoardHeight = this.buttonStart.clientHeight; // 921
 
+
+    // Remove delay press keydown
     // Player1
     body.addEventListener('keydown', (e) => {
-      if(e.key === 'z' && moveY > 0){
-        this.plateJ1.style.transitionDuration = '0s';
-        moveY -= 15;
-        this.plateJ1.style.top = `${moveY}px`;
-        console.log(moveY);
-        console.log(borderBottomPlateJ1);
-      }else if(e.key === 's' && moveY ){
-        this.plateJ1.style.transitionDuration = '0s';
-        moveY += 15;
-        this.plateJ1.style.top = `${moveY}px`;
-        console.log(moveY);
+
+      if(e.key === 'z' && this.plateJ1.moveY > 0){
+        this.plateJ1.borderBottom = this.plateJ1.moveY + this.plateJ1.elem.offsetHeight;
+        this.plateJ1.elem.style.transitionDuration = '0s';
+        this.plateJ1.moveY -= 15;
+        this.plateJ1.elem.style.top = `${this.plateJ1.moveY}px`;
+      }else if(e.key === 's'){
+        this.plateJ1.borderBottom = this.plateJ1.moveY + this.plateJ1.elem.offsetHeight;
+        this.plateJ1.elem.style.transitionDuration = '0s';
+        this.plateJ1.moveY += 15;
+        this.plateJ1.elem.style.top = `${this.plateJ1.moveY}px`;
       }
 
     });
@@ -457,6 +473,7 @@ class Pong{
     // Player2
     
 
+    // window.requestAnimationFrame();
   }
 
   
