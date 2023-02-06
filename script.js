@@ -6,12 +6,16 @@ class Pong{
     this.inputJ1 = document.getElementById('j1');
     this.inputJ2 = document.getElementById('j2');
     this.buttonKey = document.getElementById('buttonKey');
+    this.ball = document.createElement('div'); // Absolute
+    this.scoreJ1 = '0';
+    this.scoreJ2 = '0';
+
     this.plateJ1 = {
       elem: document.createElement('div'),
       id: 'plateJ1',
       opacity: 1,
       visibility: 'visible',
-      moveY: 300, // Border top
+      borderTop: 300,
       borderBottom: null
     };
 
@@ -20,20 +24,16 @@ class Pong{
       id: 'plateJ2',
       opacity: 1,
       visibility: 'visible',
-      moveY: 300,
+      borderTop: 300,
       borderBottom: null
     };
-
-    this.ball = document.createElement('div'); // Absolute
-    this.scoreJ1 = '0';
-    this.scoreJ2 = '0';
-
   }
 
   // Verify input box (regex empty)
   // Add Score
   // Move ball
   // Collision
+  // Clean code (animButtonStart)
 
   init(){
     this.animTitle();
@@ -447,24 +447,34 @@ class Pong{
 
   movePlayers(){
 
+
     const body = document.body;
     const gameBoardHeight = this.buttonStart.clientHeight; // 921
+    let remainingSpace; // Space between plate and border
+    console.log(gameBoardHeight);
 
-
-    // Remove delay press keydown
     // Player1
     body.addEventListener('keydown', (e) => {
+      if(e.key === 'z' && this.plateJ1.borderTop > 0){
+        this.plateJ1.borderTop -= 15;
+        this.plateJ1.borderBottom = this.plateJ1.borderTop + this.plateJ1.elem.offsetHeight;
+        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
+        this.plateJ1.elem.style.transitionDuration = '0s';
+        console.log(this.plateJ1.borderBottom);
+      }else if(e.key === 's' && remainingSpace <= 15){
 
-      if(e.key === 'z' && this.plateJ1.moveY > 0){
-        this.plateJ1.borderBottom = this.plateJ1.moveY + this.plateJ1.elem.offsetHeight;
+        this.plateJ1.borderTop += remainingSpace;
+        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
+        console.log('space');
+        
+      }else if(e.key === 's' && this.plateJ1.borderBottom < gameBoardHeight){
+        this.plateJ1.borderTop += 15;
+        this.plateJ1.borderBottom = this.plateJ1.borderTop + this.plateJ1.elem.offsetHeight;
+        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
         this.plateJ1.elem.style.transitionDuration = '0s';
-        this.plateJ1.moveY -= 15;
-        this.plateJ1.elem.style.top = `${this.plateJ1.moveY}px`;
-      }else if(e.key === 's'){
-        this.plateJ1.borderBottom = this.plateJ1.moveY + this.plateJ1.elem.offsetHeight;
-        this.plateJ1.elem.style.transitionDuration = '0s';
-        this.plateJ1.moveY += 15;
-        this.plateJ1.elem.style.top = `${this.plateJ1.moveY}px`;
+        remainingSpace = Math.abs(this.plateJ1.borderBottom - gameBoardHeight);
+        console.log(`\n${this.plateJ1.borderBottom}`);
+        console.log(remainingSpace);
       }
 
     });
@@ -473,7 +483,6 @@ class Pong{
     // Player2
     
 
-    // window.requestAnimationFrame();
   }
 
   
