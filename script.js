@@ -16,7 +16,10 @@ class Pong{
       opacity: 1,
       visibility: 'visible',
       borderTop: 300,
-      borderBottom: null
+      borderBottom: function(){
+        let borderBottom = this.borderTop + this.elem.offsetHeight; 
+        return borderBottom;
+      }
     };
 
     this.plateJ2 = {
@@ -421,71 +424,92 @@ class Pong{
       this.plateJ2.elem.style.opacity = this.plateJ2.opacity;
       this.plateJ2.elem.style.visibility = this.plateJ2.visibility;
       this.ball.style.opacity = 1;
-      this.countdown();
+      // this.countdown();
+      this.movePlayers() // (remove after test)
     }, 3050);
   }
 
-  countdown(){
-    const timer = document.createElement('div');
-    let count = 3;
-    let interval;
+  // countdown(){
+  //   const timer = document.createElement('div');
+  //   let count = 3;
+  //   let interval;
 
-    timer.id = 'timerCountdown';
-    this.buttonStart.append(timer);
+  //   timer.id = 'timerCountdown';
+  //   this.buttonStart.append(timer);
     
-    interval = setInterval(() => {
-      if(count > 0){
-        timer.innerText = count;
-        --count;
-      }else{
-        timer.remove();
-        clearInterval(interval);
-        this.movePlayers();
-      }
-    }, 1000);
-  }
+  //   interval = setInterval(() => {
+  //     if(count > 0){
+  //       timer.innerText = count;
+  //       --count;
+  //     }else{
+  //       timer.remove();
+  //       clearInterval(interval);
+  //       this.movePlayers();
+  //     }
+  //   }, 1000);
+  // }
 
   movePlayers(){
 
+    // Responsive height (test new game with reduce screen and max size)
 
+    // 15 = speed
     const body = document.body;
-    const gameBoardHeight = this.buttonStart.clientHeight; // 921
-    let remainingSpace; // Space between plate and border
-    console.log(gameBoardHeight);
+    const gameBoardHeight = this.buttonStart.clientHeight;
+    let remainingSpaceBottom; // Space between plate and border
+    let remainingSpaceTop;
+    let stateKeyUp = false;
+    let stateKeyDown = false;
 
     // Player1
     body.addEventListener('keydown', (e) => {
-      if(e.key === 'z' && this.plateJ1.borderTop > 0){
-        this.plateJ1.borderTop -= 15;
-        this.plateJ1.borderBottom = this.plateJ1.borderTop + this.plateJ1.elem.offsetHeight;
-        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
+      if(e.key === 'z'){
+        stateKeyUp = true;
         this.plateJ1.elem.style.transitionDuration = '0s';
-        console.log(this.plateJ1.borderBottom);
-      }else if(e.key === 's' && remainingSpace <= 15){
-
-        this.plateJ1.borderTop += remainingSpace;
-        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
-        console.log('space');
-        
-      }else if(e.key === 's' && this.plateJ1.borderBottom < gameBoardHeight){
-        this.plateJ1.borderTop += 15;
-        this.plateJ1.borderBottom = this.plateJ1.borderTop + this.plateJ1.elem.offsetHeight;
-        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
+      }else if(e.key === 's'){
+        stateKeyDown = true;
         this.plateJ1.elem.style.transitionDuration = '0s';
-        remainingSpace = Math.abs(this.plateJ1.borderBottom - gameBoardHeight);
-        console.log(`\n${this.plateJ1.borderBottom}`);
-        console.log(remainingSpace);
       }
 
+      this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
     });
+
+    body.addEventListener('keyup', (e) => {
+      if(e.key === 'z'){
+        stateKeyUp = false;
+      }else if(e.key === 's'){
+        stateKeyDown = false;
+      }
+    });
+
+    setInterval(() => {
+      if(stateKeyUp === true && remainingSpaceTop <= 10){
+        this.plateJ1.borderTop -= remainingSpaceTop;
+        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
+        remainingSpaceTop = 0;
+      }else if(stateKeyUp === true && this.plateJ1.borderTop > 0){
+        this.plateJ1.borderTop -= 10;
+        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
+        remainingSpaceBottom = Math.abs(this.plateJ1.borderBottom() - gameBoardHeight);
+        remainingSpaceTop = Math.abs(0 - this.plateJ1.borderTop);
+      }else if(stateKeyDown === true && remainingSpaceBottom <= 10){
+        this.plateJ1.borderTop += remainingSpaceBottom;
+        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
+        remainingSpaceBottom = 0;
+      }else if(stateKeyDown === true && this.plateJ1.borderBottom() < gameBoardHeight){
+        this.plateJ1.borderTop += 10;
+        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
+        remainingSpaceBottom = Math.abs(this.plateJ1.borderBottom() - gameBoardHeight);
+        remainingSpaceTop = Math.abs(0 - this.plateJ1.borderTop);
+      }
+    },20);
 
 
     // Player2
     
-
+    
   }
 
-  
 }
 
 
