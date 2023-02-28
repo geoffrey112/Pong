@@ -27,8 +27,11 @@ class Pong{
       id: 'plateJ2',
       opacity: 1,
       visibility: 'visible',
-      borderTop: 300,
-      borderBottom: null
+      borderTop: 500,
+      borderBottom: function(){
+        let borderBottom = this.borderTop + this.elem.offsetHeight;
+        return borderBottom;
+      }
     };
   }
 
@@ -133,7 +136,6 @@ class Pong{
         this.buttonStart.style.cursor = 'inherit';
         this.buttonStart.style.padding = 0;
         this.buttonStart.style.color = 'white';
-        document.querySelector('#buttonStart > span').remove();
         this.startGame();
       }else if(this.startGameStatus === false && (this.inputJ1.value === '' && this.inputJ2.value === '') || 
       (this.inputJ1.value === '' || this.inputJ2.value === '') || (this.inputJ1.value === ' ' && this.inputJ2.value === ' ') ||
@@ -377,6 +379,7 @@ class Pong{
     const elemScoreJ2 = document.createElement('span');
     const middleLine = document.createElement('div'); // absolute
 
+    document.querySelector('#buttonStart > span').remove();
     middleLine.id = 'middleLine';
     this.buttonStart.prepend(middleLine);
     p1.id = 'nameJ1';
@@ -392,6 +395,7 @@ class Pong{
     this.plateJ2.elem.id = this.plateJ2.id;
     this.ball.id = 'ball';
     this.startGameStatus = true;
+
 
     setTimeout(() => {
       this.buttonStart.style.animationName = 'boardZoomStart';
@@ -452,56 +456,109 @@ class Pong{
   movePlayers(){
 
     // Responsive height (test new game with reduce screen and max size)
+    // Check keypress at the same time
 
-    // 15 = speed
+
     const body = document.body;
     const gameBoardHeight = this.buttonStart.clientHeight;
-    let remainingSpaceBottom; // Space between plate and border
-    let remainingSpaceTop;
-    let stateKeyUp = false;
-    let stateKeyDown = false;
+    const speed = 10;
+    let remainingSpaceBottomJ1; // Space between plate and border
+    let remainingSpaceTopJ1;
+    let stateKeyUpJ1 = false;
+    let stateKeyDownJ1 = false;
 
-    // Player1
+    let remainingSpaceTopJ2;
+    let remainingSpaceBottomJ2;
+    let stateKeyUpJ2 = false;
+    let stateKeyDownJ2 = false;
+
     body.addEventListener('keydown', (e) => {
+      // Player 1
       if(e.key === 'z'){
-        stateKeyUp = true;
+        stateKeyUpJ1 = true;
         this.plateJ1.elem.style.transitionDuration = '0s';
+        // console.log('UpJ1 ' + stateKeyUpJ1);
       }else if(e.key === 's'){
-        stateKeyDown = true;
+        stateKeyDownJ1 = true;
         this.plateJ1.elem.style.transitionDuration = '0s';
+        // console.log('DownJ1 ' + stateKeyDownJ1);
       }
 
-      this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
+      // Player 2
+      if(e.key === 'ArrowUp'){
+        stateKeyUpJ2 = true;
+        this.plateJ1.elem.style.transitionDuration = '0s';
+        // console.log('UpJ2 ' + stateKeyUpJ2);
+      }else if(e.key === 'ArrowDown'){
+        stateKeyDownJ2 = true;
+        this.plateJ1.elem.style.transitionDuration = '0s';
+        // console.log('DownJ2 ' + stateKeyDownJ2);
+      }
+      
     });
 
     body.addEventListener('keyup', (e) => {
       if(e.key === 'z'){
-        stateKeyUp = false;
+        stateKeyUpJ1 = false;
+        this.plateJ2.elem.style.transitionDuration = '0s';
+        // console.log('UpJ1 ' + stateKeyUpJ1);
       }else if(e.key === 's'){
-        stateKeyDown = false;
+        stateKeyDownJ1 = false;
+        this.plateJ2.elem.style.transitionDuration = '0s';
+        // console.log('DownJ1 ' + stateKeyUpJ1);
       }
+
+      if(e.key === 'ArrowUp'){
+        stateKeyUpJ2 = false;
+        this.plateJ2.elem.style.transitionDuration = '0s';
+        // console.log('UpJ2 ' + stateKeyUpJ2);
+      }else if(e.key === 'ArrowDown'){
+        stateKeyDownJ2 = false;
+        this.plateJ2.elem.style.transitionDuration = '0s';
+        // console.log('DownJ2 ' + stateKeyUpJ2);
+      }
+
     });
 
+
     setInterval(() => {
-      if(stateKeyUp === true && remainingSpaceTop <= 10){
-        this.plateJ1.borderTop -= remainingSpaceTop;
+      if(stateKeyUpJ1 === true && remainingSpaceTopJ1 <= speed){
+        this.plateJ1.borderTop -= remainingSpaceTopJ1;
+        remainingSpaceTopJ1 = 0;
+      }else if(stateKeyUpJ1 === true && this.plateJ1.borderTop > 0){
+        this.plateJ1.borderTop -= speed;
         this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
-        remainingSpaceTop = 0;
-      }else if(stateKeyUp === true && this.plateJ1.borderTop > 0){
-        this.plateJ1.borderTop -= 10;
-        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
-        remainingSpaceBottom = Math.abs(this.plateJ1.borderBottom() - gameBoardHeight);
-        remainingSpaceTop = Math.abs(0 - this.plateJ1.borderTop);
-      }else if(stateKeyDown === true && remainingSpaceBottom <= 10){
-        this.plateJ1.borderTop += remainingSpaceBottom;
-        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
-        remainingSpaceBottom = 0;
-      }else if(stateKeyDown === true && this.plateJ1.borderBottom() < gameBoardHeight){
-        this.plateJ1.borderTop += 10;
-        this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
-        remainingSpaceBottom = Math.abs(this.plateJ1.borderBottom() - gameBoardHeight);
-        remainingSpaceTop = Math.abs(0 - this.plateJ1.borderTop);
+        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - gameBoardHeight);
+        remainingSpaceTopJ1 = Math.abs(0 - this.plateJ1.borderTop);
+      }else if(stateKeyDownJ1 === true && remainingSpaceBottomJ1 <= speed){
+        this.plateJ1.borderTop += remainingSpaceBottomJ1;
+        remainingSpaceBottomJ1 = 0;
+      }else if(stateKeyDownJ1 === true && this.plateJ1.borderBottom() < gameBoardHeight){
+        this.plateJ1.borderTop += speed;
+        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - gameBoardHeight);
+        remainingSpaceTopJ1 = Math.abs(0 - this.plateJ1.borderTop);
       }
+
+      if(stateKeyUpJ2 === true && remainingSpaceTopJ2 <= speed){
+        this.plateJ2.borderTop -= remainingSpaceTopJ2;
+        remainingSpaceTopJ2 = 0;
+      }else if(stateKeyUpJ2 === true && this.plateJ2.borderTop > 0){
+        this.plateJ2.borderTop -= speed;
+        this.plateJ2.elem.style.top = `${this.plateJ2.borderTop}px`;
+        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - gameBoardHeight);
+        remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.borderTop);
+      }else if(stateKeyDownJ2 === true && remainingSpaceBottomJ2 <= speed){
+        this.plateJ2.borderTop += remainingSpaceBottomJ2;
+        remainingSpaceBottomJ2 = 0;
+      }else if(stateKeyDownJ2 === true && this.plateJ2.borderBottom() < gameBoardHeight){
+        this.plateJ2.borderTop += speed;
+        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - gameBoardHeight);
+        remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.borderTop);
+      }
+
+      this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
+      this.plateJ2.elem.style.top = `${this.plateJ2.borderTop}px`;
+      
     },20);
 
 
