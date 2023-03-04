@@ -7,7 +7,7 @@ class Pong{
     this.inputJ2 = document.getElementById('j2');
     this.buttonKey = document.getElementById('buttonKey');
     this.gameBoardHeight;
-    this.ball = document.createElement('div'); // Absolute
+    this.gameBoardWidth;
     this.scoreJ1 = '0';
     this.scoreJ2 = '0';
 
@@ -34,11 +34,19 @@ class Pong{
         return borderBottom;
       }
     };
+
+    this.ball = {
+      elem: document.createElement('div'), // Absolute
+      id: 'ball',
+      moveX: 500,
+      moveY: 200
+    };
   }
 
   // Add Score
   // Move ball
   // Collision
+  // Check requestAnimation (better than setInterval)
 
   init(){
     this.animTitle();
@@ -392,7 +400,7 @@ class Pong{
     contentNameScore.id = 'contentNameScore';
     this.plateJ1.elem.id = this.plateJ1.id;
     this.plateJ2.elem.id = this.plateJ2.id;
-    this.ball.id = 'ball';
+    this.ball.elem.id = this.ball.id;
     this.startGameStatus = true;
 
 
@@ -418,17 +426,18 @@ class Pong{
       contentNameScore.style.opacity = 0.8;
       this.buttonStart.append(this.plateJ1.elem);
       this.buttonStart.append(this.plateJ2.elem);
-      this.buttonStart.append(this.ball);
-    },3000);
+      this.buttonStart.append(this.ball.elem);
+    },2700);
 
     setTimeout(() => {
       this.plateJ1.elem.style.opacity = this.plateJ1.opacity;
       this.plateJ1.elem.style.visibility = this.plateJ1.visibility;
       this.plateJ2.elem.style.opacity = this.plateJ2.opacity;
       this.plateJ2.elem.style.visibility = this.plateJ2.visibility;
-      this.ball.style.opacity = 1;
+      this.ball.elem.style.opacity = 1;
       // this.countdown();
       this.movePlayers() // (remove after test)
+      this.moveBall()    // (remove after test)
     }, 3050);
   }
 
@@ -448,15 +457,17 @@ class Pong{
   //       timer.remove();
   //       clearInterval(interval);
   //       this.movePlayers();
+  //       this.moveBall();
   //     }
   //   }, 1000);
   // }
 
   movePlayers(){
 
-    this.gameBoardHeight = this.buttonStart.clientHeight;
     const body = document.body;
     const speed = 10;
+    this.gameBoardHeight = this.buttonStart.clientHeight;
+    this.gameBoardWidth = this.buttonStart.clientWidth;
     let remainingSpaceBottomJ1; // Space between plate and border
     let remainingSpaceTopJ1;
     let stateKeyUpJ1 = false;
@@ -548,10 +559,32 @@ class Pong{
 
     },20);
     
-    window.addEventListener('resize', (e) =>{
+    window.addEventListener('resize', () =>{
       this.gameBoardHeight = this.buttonStart.clientHeight;
+      this.gameBoardWidth = this.buttonStart.clientWidth;
     });
     
+  }
+
+  moveBall(){
+    
+    this.ball.elem.style.transitionDuration = '0s';
+    console.log(this.ball.elem.style);
+
+    setInterval(() => {
+      if(this.ball.moveX > 0 && (this.ball.moveX + this.ball.elem.offsetWidth) < this.gameBoardWidth){
+        this.ball.moveX += 15;
+        this.ball.moveY += 8;
+        this.ball.elem.style.left = `${this.ball.moveX}px`;
+        this.ball.elem.style.top = `${this.ball.moveY}px`;
+  
+        console.log(this.ball.moveX);
+        // console.log(this.ball.moveY);
+      }
+
+
+    }, 20);
+
   }
 
 }
