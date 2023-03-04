@@ -6,6 +6,7 @@ class Pong{
     this.inputJ1 = document.getElementById('j1');
     this.inputJ2 = document.getElementById('j2');
     this.buttonKey = document.getElementById('buttonKey');
+    this.gameBoardHeight;
     this.ball = document.createElement('div'); // Absolute
     this.scoreJ1 = '0';
     this.scoreJ2 = '0';
@@ -35,11 +36,9 @@ class Pong{
     };
   }
 
-  // Verify input box (regex empty)
   // Add Score
   // Move ball
   // Collision
-  // Clean code (animButtonStart)
 
   init(){
     this.animTitle();
@@ -455,12 +454,8 @@ class Pong{
 
   movePlayers(){
 
-    // Responsive height (test new game with reduce screen and max size)
-    // Check keypress at the same time
-
-
+    this.gameBoardHeight = this.buttonStart.clientHeight;
     const body = document.body;
-    const gameBoardHeight = this.buttonStart.clientHeight;
     const speed = 10;
     let remainingSpaceBottomJ1; // Space between plate and border
     let remainingSpaceTopJ1;
@@ -477,22 +472,18 @@ class Pong{
       if(e.key === 'z'){
         stateKeyUpJ1 = true;
         this.plateJ1.elem.style.transitionDuration = '0s';
-        // console.log('UpJ1 ' + stateKeyUpJ1);
       }else if(e.key === 's'){
         stateKeyDownJ1 = true;
         this.plateJ1.elem.style.transitionDuration = '0s';
-        // console.log('DownJ1 ' + stateKeyDownJ1);
       }
 
       // Player 2
       if(e.key === 'ArrowUp'){
         stateKeyUpJ2 = true;
-        this.plateJ1.elem.style.transitionDuration = '0s';
-        // console.log('UpJ2 ' + stateKeyUpJ2);
+        this.plateJ2.elem.style.transitionDuration = '0s';
       }else if(e.key === 'ArrowDown'){
         stateKeyDownJ2 = true;
-        this.plateJ1.elem.style.transitionDuration = '0s';
-        // console.log('DownJ2 ' + stateKeyDownJ2);
+        this.plateJ2.elem.style.transitionDuration = '0s';
       }
       
     });
@@ -501,21 +492,17 @@ class Pong{
       if(e.key === 'z'){
         stateKeyUpJ1 = false;
         this.plateJ2.elem.style.transitionDuration = '0s';
-        // console.log('UpJ1 ' + stateKeyUpJ1);
       }else if(e.key === 's'){
         stateKeyDownJ1 = false;
         this.plateJ2.elem.style.transitionDuration = '0s';
-        // console.log('DownJ1 ' + stateKeyUpJ1);
       }
 
       if(e.key === 'ArrowUp'){
         stateKeyUpJ2 = false;
         this.plateJ2.elem.style.transitionDuration = '0s';
-        // console.log('UpJ2 ' + stateKeyUpJ2);
       }else if(e.key === 'ArrowDown'){
         stateKeyDownJ2 = false;
         this.plateJ2.elem.style.transitionDuration = '0s';
-        // console.log('DownJ2 ' + stateKeyUpJ2);
       }
 
     });
@@ -528,14 +515,14 @@ class Pong{
       }else if(stateKeyUpJ1 === true && this.plateJ1.borderTop > 0){
         this.plateJ1.borderTop -= speed;
         this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
-        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - gameBoardHeight);
+        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - this.gameBoardHeight);
         remainingSpaceTopJ1 = Math.abs(0 - this.plateJ1.borderTop);
       }else if(stateKeyDownJ1 === true && remainingSpaceBottomJ1 <= speed){
         this.plateJ1.borderTop += remainingSpaceBottomJ1;
         remainingSpaceBottomJ1 = 0;
-      }else if(stateKeyDownJ1 === true && this.plateJ1.borderBottom() < gameBoardHeight){
+      }else if(stateKeyDownJ1 === true && this.plateJ1.borderBottom() < this.gameBoardHeight){
         this.plateJ1.borderTop += speed;
-        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - gameBoardHeight);
+        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - this.gameBoardHeight);
         remainingSpaceTopJ1 = Math.abs(0 - this.plateJ1.borderTop);
       }
 
@@ -545,25 +532,25 @@ class Pong{
       }else if(stateKeyUpJ2 === true && this.plateJ2.borderTop > 0){
         this.plateJ2.borderTop -= speed;
         this.plateJ2.elem.style.top = `${this.plateJ2.borderTop}px`;
-        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - gameBoardHeight);
+        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - this.gameBoardHeight);
         remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.borderTop);
       }else if(stateKeyDownJ2 === true && remainingSpaceBottomJ2 <= speed){
         this.plateJ2.borderTop += remainingSpaceBottomJ2;
         remainingSpaceBottomJ2 = 0;
-      }else if(stateKeyDownJ2 === true && this.plateJ2.borderBottom() < gameBoardHeight){
+      }else if(stateKeyDownJ2 === true && this.plateJ2.borderBottom() < this.gameBoardHeight){
         this.plateJ2.borderTop += speed;
-        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - gameBoardHeight);
+        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - this.gameBoardHeight);
         remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.borderTop);
       }
 
       this.plateJ1.elem.style.top = `${this.plateJ1.borderTop}px`;
       this.plateJ2.elem.style.top = `${this.plateJ2.borderTop}px`;
-      
+
     },20);
-
-
-    // Player2
     
+    window.addEventListener('resize', (e) =>{
+      this.gameBoardHeight = this.buttonStart.clientHeight;
+    });
     
   }
 
