@@ -18,9 +18,10 @@ class Pong{
       height:150,
       opacity: 1,
       visibility: 'visible',
-      Y: 150,
+      top: 300,
+      
       borderBottom: function(){
-        let borderBottom = this.Y + this.elem.offsetHeight; 
+        let borderBottom = this.top + this.elem.offsetHeight; 
         return borderBottom;
       }
     };
@@ -32,9 +33,10 @@ class Pong{
       height:150,
       opacity: 1,
       visibility: 'visible',
-      Y: 400,
+      top: 500,
+
       borderBottom: function(){
-        let borderBottom = this.Y + this.elem.offsetHeight;
+        let borderBottom = this.top + this.elem.offsetHeight;
         return borderBottom;
       }
     };
@@ -52,8 +54,7 @@ class Pong{
     };
   }
 
-  // Resp
-  // Bug Button Key
+  // Bug Button Key (responsive)
   // Add Score
   // Move ball
   // Collision
@@ -485,7 +486,7 @@ class Pong{
       this.gameBoardHeight = this.buttonStart.clientHeight;
       this.gameBoardWidth = this.buttonStart.clientWidth;
 
-      // console.log(this.gameBoardHeight);
+      console.log(this.gameBoardHeight);
     });
 
   }
@@ -493,31 +494,36 @@ class Pong{
   movePlayers(){
 
     const body = document.body;
+    const speed = 10;
     this.gameBoardHeight = this.buttonStart.clientHeight;
     this.gameBoardWidth = this.buttonStart.clientWidth;
-    
+    let remainingSpaceBottomJ1; // Space between plate and border
+    let remainingSpaceTopJ1;
     let stateKeyUpJ1 = false;
     let stateKeyDownJ1 = false;
-    this.plateJ1.elem.style.transitionDuration = '0s';
 
+    let remainingSpaceTopJ2;
+    let remainingSpaceBottomJ2;
     let stateKeyUpJ2 = false;
     let stateKeyDownJ2 = false;
-    this.plateJ2.elem.style.transitionDuration = '0s';
-
 
     body.addEventListener('keydown', (e) => {
       // Player 1
       if(e.key === 'z'){
         stateKeyUpJ1 = true;
+        this.plateJ1.elem.style.transitionDuration = '0s';
       }else if(e.key === 's'){
         stateKeyDownJ1 = true;
+        this.plateJ1.elem.style.transitionDuration = '0s';
       }
 
       // Player 2
       if(e.key === 'ArrowUp'){
         stateKeyUpJ2 = true;
+        this.plateJ2.elem.style.transitionDuration = '0s';
       }else if(e.key === 'ArrowDown'){
         stateKeyDownJ2 = true;
+        this.plateJ2.elem.style.transitionDuration = '0s';
       }
       
     });
@@ -525,36 +531,58 @@ class Pong{
     body.addEventListener('keyup', (e) => {
       if(e.key === 'z'){
         stateKeyUpJ1 = false;
+        this.plateJ2.elem.style.transitionDuration = '0s';
       }else if(e.key === 's'){
         stateKeyDownJ1 = false;
+        this.plateJ2.elem.style.transitionDuration = '0s';
       }
 
       if(e.key === 'ArrowUp'){
         stateKeyUpJ2 = false;
+        this.plateJ2.elem.style.transitionDuration = '0s';
       }else if(e.key === 'ArrowDown'){
         stateKeyDownJ2 = false;
+        this.plateJ2.elem.style.transitionDuration = '0s';
       }
 
     });
 
 
-    setInterval(() => { 
-      if(stateKeyUpJ1 === true && this.plateJ1.Y > 0){
-        this.plateJ1.Y -= 10;
+    setInterval(() => {
+      if(stateKeyUpJ1 === true && remainingSpaceTopJ1 <= speed){
+        this.plateJ1.top -= remainingSpaceTopJ1;
+        remainingSpaceTopJ1 = 0;
+      }else if(stateKeyUpJ1 === true && this.plateJ1.top > 0){
+        this.plateJ1.top -= speed;
+        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - this.gameBoardHeight);
+        remainingSpaceTopJ1 = Math.abs(0 - this.plateJ1.top);
+      }else if(stateKeyDownJ1 === true && remainingSpaceBottomJ1 <= speed){
+        this.plateJ1.top += remainingSpaceBottomJ1;
+        remainingSpaceBottomJ1 = 0;
       }else if(stateKeyDownJ1 === true && this.plateJ1.borderBottom() < this.gameBoardHeight){
-        this.plateJ1.Y += 10;
+        this.plateJ1.top += speed;
+        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - this.gameBoardHeight);
+        remainingSpaceTopJ1 = Math.abs(0 - this.plateJ1.top);
       }
 
-      if(stateKeyUpJ2 === true && this.plateJ2.Y > 0){
-        this.plateJ2.Y -= 10;
+      if(stateKeyUpJ2 === true && remainingSpaceTopJ2 <= speed){
+        this.plateJ2.top -= remainingSpaceTopJ2;
+        remainingSpaceTopJ2 = 0;
+      }else if(stateKeyUpJ2 === true && this.plateJ2.top > 0){
+        this.plateJ2.top -= speed;
+        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - this.gameBoardHeight);
+        remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.top);
+      }else if(stateKeyDownJ2 === true && remainingSpaceBottomJ2 <= speed){
+        this.plateJ2.top += remainingSpaceBottomJ2;
+        remainingSpaceBottomJ2 = 0;
       }else if(stateKeyDownJ2 === true && this.plateJ2.borderBottom() < this.gameBoardHeight){
-        this.plateJ2.Y += 10;
+        this.plateJ2.top += speed;
+        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - this.gameBoardHeight);
+        remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.top);
       }
 
-      this.plateJ1.elem.style.transform = `translateY(${this.plateJ1.Y}px)`;
-      this.plateJ2.elem.style.transform = `translateY(${this.plateJ2.Y}px)`;
-
-      console.log(this.plateJ1.Y + ' ' + this.plateJ2.Y);
+      // this.plateJ1.elem.style.top = `${this.plateJ1.top}px`;
+      // this.plateJ2.elem.style.top = `${this.plateJ2.top}px`;
 
     },20);
     
@@ -588,6 +616,9 @@ class Pong{
     // let centerPlate = this.plateJ2.height / 2; // 75
     
     // console.log(this.plateJ2.top);
+
+    // After debug height: GIT (move ball update)
+    // Check % top and translate JS
 
   }
 
