@@ -42,12 +42,12 @@ class Pong{
     this.ball = {
       elem: document.createElement('div'), // Absolute
       id: 'ball',
-      x: 500,
+      X: 500,
       xW: function(){
-        const ballWidth = this.x + this.elem.offsetWidth;
+        const ballWidth = this.X + this.elem.offsetWidth;
         return ballWidth;
       },
-      y: 200,
+      Y: 200,
       interval: null
     };
   }
@@ -554,8 +554,6 @@ class Pong{
       this.plateJ1.elem.style.transform = `translateY(${this.plateJ1.Y}px)`;
       this.plateJ2.elem.style.transform = `translateY(${this.plateJ2.Y}px)`;
 
-      console.log(this.plateJ1.Y + ' ' + this.plateJ2.Y);
-
     },20);
     
   }
@@ -566,16 +564,15 @@ class Pong{
     this.ball.elem.style.transitionDuration = '0s';
 
     this.ball.interval = setInterval(() => {
-      if(this.ball.x > 0 && this.ball.xW() < this.gameBoardWidth && goal === false){
-        this.ball.x += 15;
-        this.ball.y += 8;
+      if(this.ball.X > 0 && this.ball.xW() < this.gameBoardWidth && goal === false){
+        this.ball.X += 15;
+        this.ball.Y += 8;
       }else{
         goal = true;
-        this.ball.x = this.gameBoardWidth - this.ball.elem.offsetWidth;
+        this.ball.X = this.gameBoardWidth - this.ball.elem.offsetWidth;
       }
-      
-      // this.ball.elem.style.left = `${this.ball.x}px`;
-      // this.ball.elem.style.top = `${this.ball.y}px`;
+
+      this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
       
       this.collision();
       
