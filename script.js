@@ -19,8 +19,9 @@ class Pong{
       opacity: 1,
       visibility: 'visible',
       Y: 150,
+      speed: 10,
       borderBottom: function(){
-        let borderBottom = this.Y + this.elem.offsetHeight; 
+        let borderBottom = this.Y + this.elem.offsetHeight;
         return borderBottom;
       }
     };
@@ -33,6 +34,7 @@ class Pong{
       opacity: 1,
       visibility: 'visible',
       Y: 400,
+      speed: 10,
       borderBottom: function(){
         let borderBottom = this.Y + this.elem.offsetHeight;
         return borderBottom;
@@ -416,7 +418,7 @@ class Pong{
     this.startGameStatus = true;
 
 
-    // Zoom buttonStart, expand line, add score
+    // Zoom buttonStart, enlarge size line, add score
     setTimeout(() => {
       this.buttonStart.style.animationName = 'boardZoomStart';
 
@@ -428,6 +430,7 @@ class Pong{
       contentNameScore.prepend(p1);
       contentNameScore.append(p2);
       this.buttonStart.prepend(contentNameScore);
+
     },1000);
 
     // Remove main screen, display score
@@ -450,6 +453,9 @@ class Pong{
       this.plateJ2.elem.style.opacity = this.plateJ2.opacity;
       this.plateJ2.elem.style.visibility = this.plateJ2.visibility;
       this.ball.elem.style.opacity = 1;
+      this.buttonStart.style.borderLeft = '0';
+      this.buttonStart.style.borderRight = '0';
+
       // this.countdown();
       this.movePlayers() // (remove after test)
       this.moveBall()    // (remove after test)
@@ -484,8 +490,6 @@ class Pong{
     window.addEventListener('resize', () => {
       this.gameBoardHeight = this.buttonStart.clientHeight;
       this.gameBoardWidth = this.buttonStart.clientWidth;
-
-      // console.log(this.gameBoardHeight);
     });
 
   }
@@ -498,10 +502,14 @@ class Pong{
     
     let stateKeyUpJ1 = false;
     let stateKeyDownJ1 = false;
+    let remainingSpaceBottomJ1; // Space between plate and border
+    let remainingSpaceTopJ1;
     this.plateJ1.elem.style.transitionDuration = '0s';
 
     let stateKeyUpJ2 = false;
     let stateKeyDownJ2 = false;
+    let remainingSpaceTopJ2;
+    let remainingSpaceBottomJ2;
     this.plateJ2.elem.style.transitionDuration = '0s';
 
 
@@ -539,22 +547,54 @@ class Pong{
 
 
     setInterval(() => { 
-      if(stateKeyUpJ1 === true && this.plateJ1.Y > 0){
-        this.plateJ1.Y -= 10;
+      if(stateKeyUpJ1 === true && remainingSpaceTopJ1 <= this.plateJ1.speed){
+        this.plateJ1.Y -= remainingSpaceTopJ1;
+        remainingSpaceTopJ1 = 0;
+      }else if(stateKeyUpJ1 === true && this.plateJ1.Y > 0){
+        this.plateJ1.Y -= this.plateJ1.speed;
+        remainingSpaceTopJ1 = Math.abs(0 - this.plateJ1.Y);
+        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - this.gameBoardHeight);
+        console.log('Top: ' + remainingSpaceTopJ1);
+        console.log('Bottom: ' + remainingSpaceBottomJ1 + '\n\n');
+      }else if(stateKeyDownJ1 === true && remainingSpaceBottomJ1 < this.plateJ1.speed){
+        this.plateJ1.Y += remainingSpaceBottomJ1;
+        remainingSpaceBottomJ1 = 0;
+        console.log('remainingBottom: ' + remainingSpaceBottomJ1);
       }else if(stateKeyDownJ1 === true && this.plateJ1.borderBottom() < this.gameBoardHeight){
-        this.plateJ1.Y += 10;
+        this.plateJ1.Y += this.plateJ1.speed;
+        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - this.gameBoardHeight);
+        remainingSpaceTopJ1 = Math.abs(0 - this.plateJ1.Y);
+        console.log('Top: ' + remainingSpaceTopJ1);
+        console.log('Bottom: ' + remainingSpaceBottomJ1 + '\n\n');
       }
 
-      if(stateKeyUpJ2 === true && this.plateJ2.Y > 0){
-        this.plateJ2.Y -= 10;
+      if(stateKeyUpJ2 === true && remainingSpaceTopJ2 <= this.plateJ2.speed){
+        this.plateJ2.Y -= remainingSpaceTopJ2;
+        remainingSpaceTopJ2 = 0;
+      }else if(stateKeyUpJ2 === true && this.plateJ2.Y > 0){
+        this.plateJ2.Y -= this.plateJ2.speed;
+        remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.Y);
+        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - this.gameBoardHeight);
+        console.log('Top: ' + remainingSpaceTopJ2);
+        console.log('Bottom: ' + remainingSpaceBottomJ2 + '\n\n');
+      }else if(stateKeyDownJ2 === true && remainingSpaceBottomJ2 < this.plateJ2.speed){
+        this.plateJ2.Y += remainingSpaceBottomJ2;
+        remainingSpaceBottomJ2 = 0;
+        console.log('remainingBottom: ' + remainingSpaceBottomJ2);
       }else if(stateKeyDownJ2 === true && this.plateJ2.borderBottom() < this.gameBoardHeight){
-        this.plateJ2.Y += 10;
+        this.plateJ2.Y += this.plateJ2.speed;
+        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - this.gameBoardHeight);
+        remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.Y);
+        console.log('Top: ' + remainingSpaceTopJ2);
+        console.log('Bottom: ' + remainingSpaceBottomJ2 + '\n\n');
       }
 
       this.plateJ1.elem.style.transform = `translateY(${this.plateJ1.Y}px)`;
       this.plateJ2.elem.style.transform = `translateY(${this.plateJ2.Y}px)`;
 
     },20);
+
+    // Bug bas écran (remainingSpace)
     
   }
 
@@ -583,8 +623,11 @@ class Pong{
   collision(){
     // Divide plate & hit ball on plate with speed - / + (save paint)
     // let centerPlate = this.plateJ2.height / 2; // 75
+
+    // if(){
+
+    // }
     
-    // console.log(this.plateJ2.top);
 
   }
 
