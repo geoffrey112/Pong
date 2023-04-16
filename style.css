@@ -310,7 +310,6 @@ h1{
   height:150px;
   width:15px;
   position: absolute;
-  left:5%;
   opacity:0;
   visibility: hidden;
   transition-duration: 0.5s;
@@ -321,7 +320,6 @@ h1{
   height:150px;
   width:15px;
   position: absolute;
-  right:5%;
   opacity: 0;
   visibility:hidden;
   transition-duration: 0.5s;

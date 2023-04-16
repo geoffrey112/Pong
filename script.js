@@ -10,6 +10,8 @@ class Pong{
     this.gameBoardWidth;
     this.scoreJ1 = '0';
     this.scoreJ2 = '0';
+    this.goalJ1 = false;
+    this.goalJ2 = false;
 
     this.plateJ1 = {
       elem: document.createElement('div'), // Absolute
@@ -18,9 +20,10 @@ class Pong{
       height:150,
       opacity: 1,
       visibility: 'visible',
-      Y: 150,
       speed: 10,
-      borderBottom: function(){
+      Y: 150,
+      X: 80,
+      yH: function(){
         let borderBottom = this.Y + this.elem.offsetHeight;
         return borderBottom;
       }
@@ -33,9 +36,10 @@ class Pong{
       height:150,
       opacity: 1,
       visibility: 'visible',
-      Y: 400,
       speed: 10,
-      borderBottom: function(){
+      Y: 400,
+      X: null,
+      yH: function(){
         let borderBottom = this.Y + this.elem.offsetHeight;
         return borderBottom;
       }
@@ -45,11 +49,15 @@ class Pong{
       elem: document.createElement('div'), // Absolute
       id: 'ball',
       X: 500,
+      Y: 200,
       xW: function(){
         const ballWidth = this.X + this.elem.offsetWidth;
         return ballWidth;
       },
-      Y: 200,
+      yH: function(){
+        const ballHeight = this.Y + this.elem.offsetHeight;
+        return ballHeight;
+      },
       interval: null
     };
   }
@@ -403,6 +411,7 @@ class Pong{
     document.querySelector('#buttonStart > span').remove();
     middleLine.id = 'middleLine';
     this.buttonStart.prepend(middleLine);
+
     p1.id = 'nameJ1';
     p2.id = 'nameJ2';
     p1.innerText = `${this.inputJ1.value}: `;
@@ -412,11 +421,12 @@ class Pong{
     elemScoreJ1.innerText = `${this.scoreJ1}`;
     elemScoreJ2.innerText = `${this.scoreJ2}`;
     contentNameScore.id = 'contentNameScore';
+
     this.plateJ1.elem.id = this.plateJ1.id;
     this.plateJ2.elem.id = this.plateJ2.id;
+
     this.ball.elem.id = this.ball.id;
     this.startGameStatus = true;
-
 
     // Zoom buttonStart, enlarge size line, add score
     setTimeout(() => {
@@ -458,7 +468,7 @@ class Pong{
 
       // this.countdown();
       this.movePlayers() // (remove after test)
-      this.moveBall()    // (remove after test)
+      this.collision()    // (remove after test)
       this.responsive(); // (remove after test)
     }, 3050);
   }
@@ -479,7 +489,7 @@ class Pong{
   //       clearInterval(interval);
   //       timer.remove();
   //       this.movePlayers();
-  //       this.moveBall();
+  //       this.collision();
   //       this.responsive();
   //     }
   //   }, 1000);
@@ -490,6 +500,11 @@ class Pong{
     window.addEventListener('resize', () => {
       this.gameBoardHeight = this.buttonStart.clientHeight;
       this.gameBoardWidth = this.buttonStart.clientWidth;
+
+      // Responsive ball when goal (J2)
+      if(this.goalJ2 === true){
+        this.ball.X = this.gameBoardWidth - this.ball.elem.offsetWidth;
+      }
     });
 
   }
@@ -511,7 +526,6 @@ class Pong{
     let remainingSpaceTopJ2;
     let remainingSpaceBottomJ2;
     this.plateJ2.elem.style.transitionDuration = '0s';
-
 
     body.addEventListener('keydown', (e) => {
       // Player 1
@@ -553,19 +567,14 @@ class Pong{
       }else if(stateKeyUpJ1 === true && this.plateJ1.Y > 0){
         this.plateJ1.Y -= this.plateJ1.speed;
         remainingSpaceTopJ1 = Math.abs(0 - this.plateJ1.Y);
-        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - this.gameBoardHeight);
-        console.log('Top: ' + remainingSpaceTopJ1);
-        console.log('Bottom: ' + remainingSpaceBottomJ1 + '\n\n');
+        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.yH() - this.gameBoardHeight);
       }else if(stateKeyDownJ1 === true && remainingSpaceBottomJ1 < this.plateJ1.speed){
         this.plateJ1.Y += remainingSpaceBottomJ1;
         remainingSpaceBottomJ1 = 0;
-        console.log('remainingBottom: ' + remainingSpaceBottomJ1);
-      }else if(stateKeyDownJ1 === true && this.plateJ1.borderBottom() < this.gameBoardHeight){
+      }else if(stateKeyDownJ1 === true && this.plateJ1.yH() < this.gameBoardHeight){
         this.plateJ1.Y += this.plateJ1.speed;
-        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.borderBottom() - this.gameBoardHeight);
+        remainingSpaceBottomJ1 = Math.abs(this.plateJ1.yH() - this.gameBoardHeight);
         remainingSpaceTopJ1 = Math.abs(0 - this.plateJ1.Y);
-        console.log('Top: ' + remainingSpaceTopJ1);
-        console.log('Bottom: ' + remainingSpaceBottomJ1 + '\n\n');
       }
 
       if(stateKeyUpJ2 === true && remainingSpaceTopJ2 <= this.plateJ2.speed){
@@ -574,60 +583,73 @@ class Pong{
       }else if(stateKeyUpJ2 === true && this.plateJ2.Y > 0){
         this.plateJ2.Y -= this.plateJ2.speed;
         remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.Y);
-        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - this.gameBoardHeight);
-        console.log('Top: ' + remainingSpaceTopJ2);
-        console.log('Bottom: ' + remainingSpaceBottomJ2 + '\n\n');
+        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.yH() - this.gameBoardHeight);
       }else if(stateKeyDownJ2 === true && remainingSpaceBottomJ2 < this.plateJ2.speed){
         this.plateJ2.Y += remainingSpaceBottomJ2;
         remainingSpaceBottomJ2 = 0;
-        console.log('remainingBottom: ' + remainingSpaceBottomJ2);
-      }else if(stateKeyDownJ2 === true && this.plateJ2.borderBottom() < this.gameBoardHeight){
+      }else if(stateKeyDownJ2 === true && this.plateJ2.yH() < this.gameBoardHeight){
         this.plateJ2.Y += this.plateJ2.speed;
-        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.borderBottom() - this.gameBoardHeight);
+        remainingSpaceBottomJ2 = Math.abs(this.plateJ2.yH() - this.gameBoardHeight);
         remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.Y);
-        console.log('Top: ' + remainingSpaceTopJ2);
-        console.log('Bottom: ' + remainingSpaceBottomJ2 + '\n\n');
       }
 
-      this.plateJ1.elem.style.transform = `translateY(${this.plateJ1.Y}px)`;
-      this.plateJ2.elem.style.transform = `translateY(${this.plateJ2.Y}px)`;
+      this.plateJ2.X = this.gameBoardWidth - 80;
+      this.plateJ1.elem.style.transform = `translateX(${this.plateJ1.X}px) translateY(${this.plateJ1.Y}px)`;
+      this.plateJ2.elem.style.transform = `translateX(${this.plateJ2.X}px) translateY(${this.plateJ2.Y}px)`;
 
     },20);
-
-    // Bug bas écran (remainingSpace)
     
-  }
-
-  moveBall(){
-    
-    let goal = false;
-    this.ball.elem.style.transitionDuration = '0s';
-
-    this.ball.interval = setInterval(() => {
-      if(this.ball.X > 0 && this.ball.xW() < this.gameBoardWidth && goal === false){
-        this.ball.X += 15;
-        this.ball.Y += 8;
-      }else{
-        goal = true;
-        this.ball.X = this.gameBoardWidth - this.ball.elem.offsetWidth;
-      }
-
-      this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
-      
-      this.collision();
-      
-    }, 20);
-
   }
   
   collision(){
-    // Divide plate & hit ball on plate with speed - / + (save paint)
-    // let centerPlate = this.plateJ2.height / 2; // 75
 
-    // if(){
+    let goal = false;
+    let centerPlateJ2 = this.plateJ2.Y + (this.plateJ2.height / 2);
 
-    // }
-    
+    let speedX = 10
+    let speedY = 8; 
+    this.ball.elem.style.transitionDuration = '0s';
+    this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
+
+    this.ball.interval = setInterval(() => {
+
+      if(this.ball.X > 0 && this.ball.xW() < this.gameBoardWidth && goal === false){
+
+        // Collision ball on border (top - bottom)
+        if(this.ball.yH() >= this.gameBoardHeight){
+          speedY = -8;
+        }else if(this.ball.Y <= 0){
+          speedY = 8;
+        }
+
+        // Collision ball on plate J2
+        if(this.ball.xW() >= this.plateJ2.X && this.ball.yH() >= this.plateJ2.Y){
+          console.log('hit');
+        }
+
+        this.ball.X += speedX;
+        this.ball.Y += speedY;
+
+        // switch(this.ball){ // With centerPlate (divide plate & hit ball on plate with speed - / +)
+
+      }else{ // Goal
+        goal = true;
+
+        if(this.ball.X <= 0){
+          this.goalJ1 = true;
+        }
+
+        if(this.ball.xW() >= this.gameBoardWidth){
+          this.goalJ2 = true;
+        }
+
+      }
+
+      this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
+
+    }, 20);
+
+
 
   }
 
