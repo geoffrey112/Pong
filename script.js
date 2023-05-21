@@ -16,48 +16,70 @@ class Pong{
     this.plateJ1 = {
       elem: document.createElement('div'), // Absolute
       id: 'plateJ1',
-      width:15,
-      height:150,
       opacity: 1,
       visibility: 'visible',
       speed: 10,
       Y: 150,
       X: 80,
       yH: function(){
-        let borderBottom = this.Y + this.elem.offsetHeight;
+        const borderBottom = this.Y + this.elem.offsetHeight;
         return borderBottom;
+      },
+      xW: function(){
+        const plateWidth = this.X + this.elem.offsetWidth;
+        return plateWidth; 
       }
     };
 
     this.plateJ2 = {
       elem: document.createElement('div'), // Absolute
       id: 'plateJ2',
-      width:15,
-      height:150,
       opacity: 1,
       visibility: 'visible',
       speed: 10,
       Y: 400,
       X: null,
       yH: function(){
-        let borderBottom = this.Y + this.elem.offsetHeight;
+        const borderBottom = this.Y + this.elem.offsetHeight;
         return borderBottom;
+      },
+      yMiddle: function(){
+        const middleOfPlate = this.Y + this.elem.offsetHeight / 2;
+        return middleOfPlate;
+      },
+      xW: function(){
+        const plateWidth = this.X + this.elem.offsetWidth;
+        return plateWidth; 
       }
     };
 
     this.ball = {
       elem: document.createElement('div'), // Absolute
       id: 'ball',
-      X: 500,
-      Y: 200,
+      X: 500, // 500 default (1400)
+      Y: 200, // 200 default (700)
+      speedX: 8,
+      speedY: 2,
+      xMiddle: function(){
+        const middleOfBall = this.X + this.elem.offsetWidth / 2;
+        return middleOfBall;
+      },
+
+      yMiddle: function(){
+        const middleOfBall = this.Y + this.elem.offsetHeight / 2;
+        return middleOfBall;
+      },
+
       xW: function(){
         const ballWidth = this.X + this.elem.offsetWidth;
         return ballWidth;
       },
+
       yH: function(){
         const ballHeight = this.Y + this.elem.offsetHeight;
         return ballHeight;
       },
+
       interval: null
     };
   }
@@ -65,10 +87,8 @@ class Pong{
   // Resp
   // Bug Button Key
   // Add Score
-  // Move ball
   // Collision
   // Check requestAnimation (better than setInterval)
-  // Divide plate (increase / decrease speed)
 
   init(){
     this.animTitle();
@@ -426,6 +446,8 @@ class Pong{
     this.plateJ2.elem.id = this.plateJ2.id;
 
     this.ball.elem.id = this.ball.id;
+    this.ball.elem.style.transitionDuration = '0s';
+    this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
     this.startGameStatus = true;
 
     // Zoom buttonStart, enlarge size line, add score
@@ -593,7 +615,7 @@ class Pong{
         remainingSpaceTopJ2 = Math.abs(0 - this.plateJ2.Y);
       }
 
-      this.plateJ2.X = this.gameBoardWidth - 80;
+      this.plateJ2.X = this.gameBoardWidth - 95;
       this.plateJ1.elem.style.transform = `translateX(${this.plateJ1.X}px) translateY(${this.plateJ1.Y}px)`;
       this.plateJ2.elem.style.transform = `translateX(${this.plateJ2.X}px) translateY(${this.plateJ2.Y}px)`;
 
@@ -603,13 +625,11 @@ class Pong{
   
   collision(){
 
+    // let centerPlateJ2 = this.plateJ2.Y + (this.plateJ2.height / 2);
+    // switch(this.ball){} // With centerPlate (divide plate & hit ball on plate with speed - / +)
+    
     let goal = false;
-    let centerPlateJ2 = this.plateJ2.Y + (this.plateJ2.height / 2);
-
-    let speedX = 10
-    let speedY = 8; 
-    this.ball.elem.style.transitionDuration = '0s';
-    this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
+    console.log(window.getComputedStyle(this.buttonStart).getPropertyValue('border')); 
 
     this.ball.interval = setInterval(() => {
 
@@ -617,20 +637,27 @@ class Pong{
 
         // Collision ball on border (top - bottom)
         if(this.ball.yH() >= this.gameBoardHeight){
-          speedY = -8;
+          this.ball.speedY = -8;
         }else if(this.ball.Y <= 0){
-          speedY = 8;
+          this.ball.speedY = 8;
         }
 
-        // Collision ball on plate J2
-        if(this.ball.xW() >= this.plateJ2.X && this.ball.yH() >= this.plateJ2.Y){
-          console.log('hit');
-        }
-
-        this.ball.X += speedX;
-        this.ball.Y += speedY;
-
-        // switch(this.ball){ // With centerPlate (divide plate & hit ball on plate with speed - / +)
+        // Collision ball on plate J1 - J2 
+        if(this.ball.xMiddle() >= this.plateJ2.X && this.ball.xMiddle() <= this.plateJ2.xW() && this.ball.yH() >= this.plateJ2.Y && this.ball.yH() <= this.plateJ2.yMiddle()){ // Top J2
+          this.ball.speedY = -8;
+        }else if(this.ball.xMiddle() >= this.plateJ2.X && this.ball.xMiddle() <= this.plateJ2.xW() && this.ball.Y <= this.plateJ2.yH() && this.ball.Y >= this.plateJ2.yMiddle()){ // Bottom J2 (same than Top but reversed)
+          this.ball.speedY = 8;
+        }else if(this.ball.xW() >= this.plateJ2.X && this.ball.xW() <= this.plateJ2.xW() && (this.ball.yH() - 10) >= this.plateJ2.Y && (this.ball.Y + 10) <= this.plateJ2.yH()){ // Front J2
+          this.ball.speedX = -8;
+        }//else if(this.ball.X <= this.plateJ1.xW() && this.ball.yH() >= this.plateJ1.Y){
+        //   this.ball.speedX = 8;
+        // }
+        
+        this.ball.X += this.ball.speedX;
+        this.ball.Y += this.ball.speedY;
+        
+        // Ball pass throught the plate 2 (add collision bottom of plate)
+        // + Add bottom collision j1
 
       }else{ // Goal
         goal = true;
@@ -645,9 +672,9 @@ class Pong{
 
       }
 
-      this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
+      this.ball.elem.style.transform = `translate(${this.ball.X}px, ${this.ball.Y}px)`;
 
-    }, 20);
+    }, 80);
 
 
 
