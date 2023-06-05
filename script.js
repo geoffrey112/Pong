@@ -1,17 +1,160 @@
 class Pong{
   constructor(){
-    this.startGameStatus = false;
+    this.body = document.getElementById('changeStateButKey');
     this.contentInput = document.getElementById('contentInput');
-    this.buttonStart = document.getElementById('buttonStart');
     this.inputJ1 = document.getElementById('j1');
     this.inputJ2 = document.getElementById('j2');
-    this.buttonKey = document.getElementById('buttonKey');
+    this.buttonStart = document.getElementById('buttonStart');
+    this.isStartPointDown = false;
+    this.startGameStatus = false;
     this.gameBoardHeight;
     this.gameBoardWidth;
     this.scoreJ1 = '0';
     this.scoreJ2 = '0';
     this.goalJ1 = false;
     this.goalJ2 = false;
+
+    this.buttonKey = {
+      button: document.getElementById('buttonKey'),
+      mainTxt: document.querySelector('#buttonKey > span'),
+      iconArcade: document.getElementById('iconArcade'),
+      contentJ1: document.createElement('div'),
+      contentJ2: document.createElement('div'),
+      titleJ1: document.createElement('p'),
+      titleJ2: document.createElement('p'),
+      keyZ: document.createElement('div'),
+      keyS: document.createElement('div'),
+      keyUp: document.createElement('div'),
+      keyDown: document.createElement('div'),
+      isClick: false,
+      isPointerDown: false,
+      mouseEnter: function(){
+        if(this.isClick === false){
+          this.button.style.transitionDuration = '0s';
+          this.button.style.border = '8px outset white';
+          this.button.style.backgroundColor = 'white';
+          this.iconArcade.style.transitionDelay = '0s';
+          this.iconArcade.style.transitionDuration = '0s';
+          this.iconArcade.style.background = "center/cover url('icon/arcadeBlack.png')";
+          this.mainTxt.style.fontWeight = 'bold';
+          this.mainTxt.style.transitionDelay = '0s';
+          this.mainTxt.style.transitionDuration = '0s';
+          this.mainTxt.style.color = 'black';
+        }
+      },
+      mouseLeave: function(){
+        if(this.isClick === false){
+          this.button.style.border = '8px outset white';
+          this.button.style.backgroundColor = ' black';
+          this.button.style.fontWeight = 'initial';
+          this.iconArcade.style.transitionDelay = '0s';
+          this.iconArcade.style.transitionDuration = '0s';
+          this.iconArcade.style.background = "center/cover url('icon/arcadeWhite.png')";
+          this.mainTxt.style.color = 'white';
+          this.mainTxt.style.fontWeight = 'initial';
+        }
+      },
+      open: function(){
+        if(this.isClick === false){
+          this.button.style.border = '8px outset white';
+          this.button.style.transitionDuration = '0.4s';
+          this.button.style.backgroundColor = 'black';
+          this.button.style.cursor = 'default';
+          this.mainTxt.style.transitionDuration = '0.4s';
+          this.mainTxt.style.visibility = 'hidden';
+          this.mainTxt.style.opacity = 0;
+          this.iconArcade.style.transitionDuration = '0.4s';
+          this.iconArcade.style.visibility = 'hidden';
+          this.iconArcade.style.opacity = 0;
+          this.isClick = true;
+  
+          this.button.prepend(this.contentJ1);
+          this.button.append(this.contentJ2);
+    
+          setTimeout(() => {
+            this.button.style.transitionDuration = '1s';
+            this.button.style.width = '400px';
+            this.button.style.height = '300px';
+            this.contentJ1.style.height = '250px';
+            this.contentJ1.style.width = '150px';
+            this.contentJ2.style.height = '250px';
+            this.contentJ2.style.width = '150px';
+          }, 200);
+  
+          setTimeout(() => {
+            this.contentJ1.style.opacity = 1;
+            this.contentJ1.style.visibility = 'visible';
+            this.contentJ1.style.animationName = 'animKey';
+            this.contentJ1.style.animationDuration = '1s';
+            this.contentJ1.style.marginTop = '30px';
+            this.contentJ1.prepend(this.titleJ1);
+            this.contentJ1.append(this.keyZ);
+            this.contentJ1.append(this.keyS);
+  
+            this.contentJ2.style.opacity = 1;
+            this.contentJ2.style.visibility = 'visible';
+            this.contentJ2.style.animationName = 'animKey';
+            this.contentJ2.style.animationDuration = '1s';
+            this.contentJ2.style.marginTop = '30px';
+            this.contentJ2.prepend(this.titleJ2);
+            this.contentJ2.append(this.keyUp);
+            this.contentJ2.append(this.keyDown);
+          }, 600);
+  
+          setTimeout(() => {
+            this.keyZ.style.display = 'block';
+            this.keyS.style.display = 'block';
+            this.keyUp.style.display = 'block';
+            this.keyDown.style.display = 'block';
+          },800);
+        }  
+      },
+      close: function(){
+        if(this.isClick === true){
+          this.contentJ1.style.opacity = 0;
+          this.contentJ1.style.visibility = 'hidden';
+          this.contentJ2.style.opacity = 0;
+          this.contentJ2.style.visibility = 'hidden';
+          
+          setTimeout(() => {
+            this.button.style.width = '95px';
+            this.button.style.height = '55px';
+            this.button.style.cursor = 'pointer';
+            this.mainTxt.style.visibility = 'visible';
+            this.mainTxt.style.color = 'white';
+            this.mainTxt.style.fontWeight = 'initial';
+            this.mainTxt.style.transitionDelay = '0.8s';
+            this.mainTxt.style.visibility = 'visible';
+            this.mainTxt.style.opacity = 1;
+            this.iconArcade.style.background = "center/cover url('icon/arcadeWhite.png')";
+            this.iconArcade.style.visibility = 'visible';
+            this.iconArcade.style.opacity = 1;
+            this.iconArcade.style.transitionDelay = '0.8s';
+            this.contentJ1.style.opacity = 0;
+            this.contentJ1.style.visibility = 'hidden';
+            this.contentJ1.style.width = '90px';
+            this.contentJ1.style.height = '0';
+            this.contentJ1.style.animationName = '';
+            this.contentJ2.style.opacity = 0;
+            this.contentJ2.style.visibility = 'hidden';
+            this.contentJ2.style.width = '90px';
+            this.contentJ2.style.height = '0';
+            this.contentJ2.style.animationName = '';
+            this.keyZ.style.display = 'none';
+            this.keyS.style.display = 'none';
+            this.keyUp.style.display = 'none';
+            this.keyDown.style.display = 'none';
+            this.titleJ1.remove();
+            this.keyZ.remove();
+            this.keyS.remove();
+            this.titleJ2.remove();
+            this.keyUp.remove();
+            this.keyDown.remove();
+            this.isClick = false;
+          }, 400);
+        }
+      }
+    };
 
     this.plateJ1 = {
       elem: document.createElement('div'), // Absolute
@@ -91,7 +234,6 @@ class Pong{
   // Resp
   // Bug Button Key
   // Add Score
-  // Collision
   // Check requestAnimation (better than setInterval)
 
   init(){
@@ -156,7 +298,8 @@ class Pong{
         this.buttonStart.style.borderRight = '8px solid white';
         this.buttonStart.style.fontSize = '38px';
         txtButton.style.marginLeft = '4px';
-      } 
+        this.isStartPointDown = true;
+      }
     });
 
     this.buttonStart.addEventListener('mouseenter', () => {
@@ -178,6 +321,7 @@ class Pong{
         this.buttonStart.style.borderLeft = '8px solid white';
         this.buttonStart.style.borderTop = '8px solid white';
         this.buttonStart.style.fontSize = '40px';
+        this.isStartPointDown = false;
       }
     });
 
@@ -205,185 +349,58 @@ class Pong{
 
   keyButton(){
 
-    const txtButton = document.querySelector('#buttonKey > span');
-    const iconArcade = document.getElementById('iconArcade');
-    const body = document.getElementById('changeStateButKey');
-    const contentKeyJ1 = document.createElement('div');
-    const contentKeyJ2 = document.createElement('div');
-    const titleKeyJ1 = document.createElement('p');
-    const titleKeyJ2 = document.createElement('p');
-    const keyZ = document.createElement('div');
-    const keyS = document.createElement('div');
-    const keyUp = document.createElement('div');
-    const keyDown = document.createElement('div');
-    let isClickButKey = false;
+    this.buttonKey.contentJ1.classList.add('contentKeyJ1');
+    this.buttonKey.contentJ2.classList.add('contentKeyJ2');
+    this.buttonKey.titleJ1.classList.add('titleKeyJ1');
+    this.buttonKey.titleJ1.innerText = 'J1';
+    this.buttonKey.keyZ.classList.add('keyZ', 'margeLKeyZ');
+    this.buttonKey.keyZ.innerText = 'Z';
+    this.buttonKey.keyS.classList.add('keyS', 'margeRKeyS');
+    this.buttonKey.keyS.innerText = 'S';
 
-    contentKeyJ1.classList.add('contentKeyJ1');
-    contentKeyJ2.classList.add('contentKeyJ2');
-    titleKeyJ1.classList.add('titleKeyJ1');
-    titleKeyJ1.innerText = 'J1';
-    keyZ.classList.add('keyZ', 'margeLKeyZ');
-    keyZ.innerText = 'Z';
-    keyS.classList.add('keyS', 'margeRKeyS');
-    keyS.innerText = 'S';
-
-    titleKeyJ2.classList.add('titleKeyJ2');
-    titleKeyJ2.innerText = 'J2';
-    keyUp.classList.add('keyUp');
-    keyUp.innerText = '↑';
-    keyDown.classList.add('keyDown');
-    keyDown.innerText = '↓';
+    this.buttonKey.titleJ2.classList.add('titleKeyJ2');
+    this.buttonKey.titleJ2.innerText = 'J2';
+    this.buttonKey.keyUp.classList.add('keyUp');
+    this.buttonKey.keyUp.innerText = '↑';
+    this.buttonKey.keyDown.classList.add('keyDown');
+    this.buttonKey.keyDown.innerText = '↓';
 
     // Display button
     if(sessionStorage.getItem('cookieAnim') === null){
       setTimeout(() => {
-        this.buttonKey.style.transitionDuration = '1s';
-        this.buttonKey.style.opacity = 1;
-        this.buttonKey.style.visibility = 'visible';
-        this.buttonKey.style.color = 'white';
+        this.buttonKey.button.style.transitionDuration = '1s';
+        this.buttonKey.button.style.opacity = 1;
+        this.buttonKey.button.style.visibility = 'visible';
+        this.buttonKey.button.style.color = 'white';
       },4000);
     }else{
-      this.buttonKey.style.visibility = 'visible';
-      this.buttonKey.style.opacity = 1;
+      this.buttonKey.button.style.visibility = 'visible';
+      this.buttonKey.button.style.opacity = 1;
     }
     
-    // Change design button (hover)
-    this.buttonKey.addEventListener('mouseenter', () => {
-      if(isClickButKey === false){
-        this.buttonKey.style.transitionDuration = '0s';
-        this.buttonKey.style.border = '8px outset white';
-        this.buttonKey.style.backgroundColor = 'white';
-        iconArcade.style.transitionDelay = '0s';
-        iconArcade.style.transitionDuration = '0s';
-        iconArcade.style.background = "center/cover url('icon/arcadeBlack.png')";
-        txtButton.style.fontWeight = 'bold';
-        txtButton.style.transitionDelay = '0s';
-        txtButton.style.transitionDuration = '0s';
-        txtButton.style.color = 'black';
+    // Change design button
+    this.buttonKey.button.addEventListener('mouseenter', () => {
+      this.buttonKey.mouseEnter();
+    });
+
+    this.buttonKey.button.addEventListener('mouseleave', () => {
+      this.buttonKey.mouseLeave();
+    });
+
+    this.buttonKey.button.addEventListener('pointerdown', () => {
+      if(this.buttonKey.isClick === false){
+        this.buttonKey.button.style.border = '8px inset white';
+        this.buttonKey.isPointerDown = true;
       }
     });
 
-    this.buttonKey.addEventListener('mouseleave', () => {
-      if(isClickButKey === false){
-        this.buttonKey.style.border = '8px outset white';
-        this.buttonKey.style.backgroundColor = ' black';
-        this.buttonKey.style.fontWeight = 'initial';
-        iconArcade.style.transitionDelay = '0s';
-        iconArcade.style.transitionDuration = '0s';
-        iconArcade.style.background = "center/cover url('icon/arcadeWhite.png')";
-        txtButton.style.color = 'white';
-        txtButton.style.fontWeight = 'initial';
-      }
+    this.buttonKey.button.addEventListener('click', () => {
+      this.buttonKey.open();
     });
 
-    this.buttonKey.addEventListener('pointerdown', () => {
-      if(isClickButKey === false){
-        this.buttonKey.style.border = '8px inset white';
-      }
-    });
-
-    // Open button
-    this.buttonKey.addEventListener('click', () => {
-      if(isClickButKey === false){
-        this.buttonKey.style.border = '8px outset white';
-        this.buttonKey.style.transitionDuration = '0.4s';
-        this.buttonKey.style.backgroundColor = 'black';
-        this.buttonKey.style.cursor = 'default';
-        txtButton.style.transitionDuration = '0.4s';
-        txtButton.style.visibility = 'hidden';
-        txtButton.style.opacity = 0;
-        iconArcade.style.transitionDuration = '0.4s';
-        iconArcade.style.visibility = 'hidden';
-        iconArcade.style.opacity = 0;
-        isClickButKey = true;
-
-        this.buttonKey.prepend(contentKeyJ1);
-        this.buttonKey.append(contentKeyJ2);
-  
-        setTimeout(() => {
-          this.buttonKey.style.transitionDuration = '1s';
-          this.buttonKey.style.width = '400px';
-          this.buttonKey.style.height = '300px';
-          contentKeyJ1.style.height = '250px';
-          contentKeyJ1.style.width = '150px';
-          contentKeyJ2.style.height = '250px';
-          contentKeyJ2.style.width = '150px';
-        }, 200);
-
-        setTimeout(() => {
-          contentKeyJ1.style.opacity = 1;
-          contentKeyJ1.style.visibility = 'visible';
-          contentKeyJ1.style.animationName = 'animKey';
-          contentKeyJ1.style.animationDuration = '1s';
-          contentKeyJ1.style.marginTop = '30px';
-          contentKeyJ1.prepend(titleKeyJ1);
-          contentKeyJ1.append(keyZ);
-          contentKeyJ1.append(keyS);
-
-          contentKeyJ2.style.opacity = 1;
-          contentKeyJ2.style.visibility = 'visible';
-          contentKeyJ2.style.animationName = 'animKey';
-          contentKeyJ2.style.animationDuration = '1s';
-          contentKeyJ2.style.marginTop = '30px';
-          contentKeyJ2.prepend(titleKeyJ2);
-          contentKeyJ2.append(keyUp);
-          contentKeyJ2.append(keyDown);
-        }, 600);
-
-        setTimeout(() => {
-          keyZ.style.display = 'block';
-          keyS.style.display = 'block';
-          keyUp.style.display = 'block';
-          keyDown.style.display = 'block';
-        },800);
-      }
-    });
-
-    // Close button
-    body.addEventListener('click', () => {
-      if(isClickButKey === true){
-        contentKeyJ1.style.opacity = 0;
-        contentKeyJ1.style.visibility = 'hidden';
-        contentKeyJ2.style.opacity = 0;
-        contentKeyJ2.style.visibility = 'hidden';
-        
-        setTimeout(() => {
-          this.buttonKey.style.width = '95px';
-          this.buttonKey.style.height = '55px';
-          this.buttonKey.style.cursor = 'pointer';
-          txtButton.style.visibility = 'visible';
-          txtButton.style.color = 'white';
-          txtButton.style.fontWeight = 'initial';
-          txtButton.style.transitionDelay = '0.8s';
-          txtButton.style.visibility = 'visible';
-          txtButton.style.opacity = 1;
-          iconArcade.style.background = "center/cover url('icon/arcadeWhite.png')";
-          iconArcade.style.visibility = 'visible';
-          iconArcade.style.opacity = 1;
-          iconArcade.style.transitionDelay = '0.8s';
-          contentKeyJ1.style.opacity = 0;
-          contentKeyJ1.style.visibility = 'hidden';
-          contentKeyJ1.style.width = '90px';
-          contentKeyJ1.style.height = '0';
-          contentKeyJ1.style.animationName = '';
-          contentKeyJ2.style.opacity = 0;
-          contentKeyJ2.style.visibility = 'hidden';
-          contentKeyJ2.style.width = '90px';
-          contentKeyJ2.style.height = '0';
-          contentKeyJ2.style.animationName = '';
-          keyZ.style.display = 'none';
-          keyS.style.display = 'none';
-          keyUp.style.display = 'none';
-          keyDown.style.display = 'none';
-          titleKeyJ1.remove();
-          keyZ.remove();
-          keyS.remove();
-          titleKeyJ2.remove();
-          keyUp.remove();
-          keyDown.remove();
-          isClickButKey = false;
-        }, 400);
-      }
+    this.body.addEventListener('click', () => {
+      this.buttonKey.close();
+      this.buttonKey.isPointerDown = false;
     });
 
   }
@@ -420,6 +437,119 @@ class Pong{
         errorMsg.remove();
       }
     });
+  }
+
+  tabButton(){
+
+    const txtButton = document.querySelector('#buttonStart>span');
+
+    this.buttonStart.addEventListener('focusin', () => {
+        if(this.startGameStatus === false && this.isStartPointDown === false){
+          this.buttonStart.style.color = 'black';
+          this.buttonStart.style.backgroundColor = 'white';
+          this.buttonStart.style.borderRight = '8px solid #999999';
+          this.buttonStart.style.borderBottom = '8px solid #999999';
+          this.buttonStart.style.cursor = 'pointer';
+        }
+    });
+
+    this.buttonStart.addEventListener('focusout', () => {
+      this.buttonStart.style.color = 'white';
+      this.buttonStart.style.backgroundColor = 'black';
+      this.buttonStart.style.borderRight = '8px solid white';
+      this.buttonStart.style.borderBottom = '8px solid white';
+      this.buttonStart.style.borderLeft = '8px solid white';
+      this.buttonStart.style.borderTop = '8px solid white';
+      this.buttonStart.style.fontSize = '40px';
+    });
+
+    // this.buttonStart.addEventListener('keydown', (e) => {
+    //   if(e.key === 'Enter'){
+    //     if(this.startGameStatus === false && this.inputJ1.value !== '' && this.inputJ2.value !== '' && this.inputJ1.value !== ' ' && this.inputJ2.value !== ' '){
+    //       this.buttonStart.style.backgroundColor = 'black';
+    //       this.buttonStart.style.borderTop = '8px solid white';
+    //       this.buttonStart.style.borderLeft = '8px solid white';
+    //       this.buttonStart.style.cursor = 'inherit';
+    //       this.buttonStart.style.padding = 0;
+    //       this.buttonStart.style.color = 'white';
+    //       this.startGame();
+    //     }else if(this.startGameStatus === false && (this.inputJ1.value === '' && this.inputJ2.value === '') || 
+    //     (this.inputJ1.value === '' || this.inputJ2.value === '') || (this.inputJ1.value === ' ' && this.inputJ2.value === ' ') ||
+    //     (this.inputJ1.value === ' ' || this.inputJ2.value === ' ')){
+    //       this.buttonStart.style.borderRight = '8px solid #999999';
+    //       this.buttonStart.style.borderBottom = '8px solid #999999';
+    //       this.buttonStart.style.borderTop = '8px solid white';
+    //       this.buttonStart.style.borderLeft = '8px solid white';
+    //       this.buttonStart.style.fontSize = '40px';
+    //       txtButton.style.marginLeft = '0';
+    //     }
+    //   }
+    // });
+
+    this.buttonKey.button.addEventListener('focusin', () => {
+      if(this.buttonKey.isPointerDown === false){
+        this.buttonKey.mouseEnter();
+      }
+    });
+
+    this.buttonKey.button.addEventListener('focusout', () => {
+      this.buttonKey.mouseLeave();
+    });
+
+    // this.buttonKey.button.addEventListener('keydown', (e) => {
+    //   if(e.key === 'Enter'){
+    //     this.buttonKey.open();
+    //   }
+    // });
+
+    // Click body, close button (check buttonKey)
+    // body.addEventListener('click', () => {
+    //   if(isClickButKey === true){
+    //     contentKeyJ1.style.opacity = 0;
+    //     contentKeyJ1.style.visibility = 'hidden';
+    //     contentKeyJ2.style.opacity = 0;
+    //     contentKeyJ2.style.visibility = 'hidden';
+        
+    //     setTimeout(() => {
+    //       this.buttonKey.style.width = '95px';
+    //       this.buttonKey.style.height = '55px';
+    //       this.buttonKey.style.cursor = 'pointer';
+    //       txtButton.style.visibility = 'visible';
+    //       txtButton.style.color = 'white';
+    //       txtButton.style.fontWeight = 'initial';
+    //       txtButton.style.transitionDelay = '0.8s';
+    //       txtButton.style.visibility = 'visible';
+    //       txtButton.style.opacity = 1;
+    //       iconArcade.style.background = "center/cover url('icon/arcadeWhite.png')";
+    //       iconArcade.style.visibility = 'visible';
+    //       iconArcade.style.opacity = 1;
+    //       iconArcade.style.transitionDelay = '0.8s';
+    //       contentKeyJ1.style.opacity = 0;
+    //       contentKeyJ1.style.visibility = 'hidden';
+    //       contentKeyJ1.style.width = '90px';
+    //       contentKeyJ1.style.height = '0';
+    //       contentKeyJ1.style.animationName = '';
+    //       contentKeyJ2.style.opacity = 0;
+    //       contentKeyJ2.style.visibility = 'hidden';
+    //       contentKeyJ2.style.width = '90px';
+    //       contentKeyJ2.style.height = '0';
+    //       contentKeyJ2.style.animationName = '';
+    //       keyZ.style.display = 'none';
+    //       keyS.style.display = 'none';
+    //       keyUp.style.display = 'none';
+    //       keyDown.style.display = 'none';
+    //       titleKeyJ1.remove();
+    //       keyZ.remove();
+    //       keyS.remove();
+    //       titleKeyJ2.remove();
+    //       keyUp.remove();
+    //       keyDown.remove();
+    //       isClickButKey = false;
+    //     }, 400);
+    //   }
+    // });
+
+
   }
 
   startGame(){
@@ -473,7 +603,7 @@ class Pong{
     setTimeout(() =>{
       title.remove();
       this.contentInput.remove();
-      this.buttonKey.remove();
+      this.buttonKey.button.remove();
 
       this.buttonStart.style.top = '0';
       contentNameScore.style.opacity = 0.8;
@@ -638,14 +768,14 @@ class Pong{
 
       if(this.ball.X > 0 && this.ball.xW() < this.gameBoardWidth && goal === false){
 
-        // Collision ball on border (top - bottom)
+        // Collision ball with border (top - bottom)
         if(this.ball.yH() >= this.gameBoardHeight){
           this.ball.speedY = -8;
         }else if(this.ball.Y <= 0){
           this.ball.speedY = 8;
         }
 
-        // Collision ball on plate J1 - J2 
+        // Collision ball with plate J1 - J2 
         if(this.ball.xMiddle() >= this.plateJ2.X && this.ball.xMiddle() <= this.plateJ2.xW() && this.ball.yH() >= this.plateJ2.Y && this.ball.yH() <= this.plateJ2.yMiddle()){ // Top J2
           this.ball.speedY = -8;
         }else if(this.ball.xMiddle() >= this.plateJ2.X && this.ball.xMiddle() <= this.plateJ2.xW() && this.ball.Y <= this.plateJ2.yH() && this.ball.Y >= this.plateJ2.yMiddle()){ // Bottom J2
@@ -659,7 +789,6 @@ class Pong{
         }else if(this.ball.X <= this.plateJ1.xW() && this.ball.X >= this.plateJ1.X && (this.ball.yH() - 10) >= this.plateJ1.Y && (this.ball.Y + 10) <= this.plateJ1.yH()){ // Front J1
           this.ball.speedX = 8;
         }
-        
         
         this.ball.X += this.ball.speedX;
         this.ball.Y += this.ball.speedY;
@@ -679,7 +808,7 @@ class Pong{
 
       this.ball.elem.style.transform = `translate(${this.ball.X}px, ${this.ball.Y}px)`;
 
-    }, 120);
+    }, 20);
 
 
 
