@@ -203,9 +203,9 @@ class Pong{
     this.ball = {
       elem: document.createElement('div'), // Absolute
       id: 'ball',
-      X: 500, // 500 default (1400)
-      Y: 200, // 200 default (700)
-      speedX: 8, // 8
+      X: 500,
+      Y: 200,
+      speedX: 8,
       speedY: 8,
       xMiddle: function(){
         const middleOfBall = this.X + this.elem.offsetWidth / 2;
@@ -334,6 +334,7 @@ class Pong{
         this.buttonStart.style.padding = 0;
         this.buttonStart.style.color = 'white';
         this.startGame();
+        this.checkErrorMsg();
       }else if(this.startGameStatus === false && (this.inputJ1.value === '' && this.inputJ2.value === '') || 
       (this.inputJ1.value === '' || this.inputJ2.value === '') || (this.inputJ1.value === ' ' && this.inputJ2.value === ' ') ||
       (this.inputJ1.value === ' ' || this.inputJ2.value === ' ')){
@@ -343,6 +344,7 @@ class Pong{
         this.buttonStart.style.borderLeft = '8px solid white';
         this.buttonStart.style.fontSize = '40px';
         txtButton.style.marginLeft = '0';
+        this.checkErrorMsg();
       }
     });
   }
@@ -425,7 +427,7 @@ class Pong{
       });
     }
     
-    this.buttonStart.addEventListener('click', () => {      
+    this.checkErrorMsg = () => {
       if((this.inputJ1.value === '' && this.inputJ2.value === '') || (this.inputJ1.value === ' ' && this.inputJ2.value === ' ') || 
       (this.inputJ1.value === ' ' && this.inputJ2.value === '') || (this.inputJ1.value === '' && this.inputJ2.value === ' ')){
         displayErrorMsg('Enter username: J1 - J2');
@@ -436,7 +438,8 @@ class Pong{
       }else if(this.inputJ1.value !== '' && this.inputJ2.value !== ''){
         errorMsg.remove();
       }
-    });
+    };
+
   }
 
   tabButton(){
@@ -444,13 +447,13 @@ class Pong{
     const txtButton = document.querySelector('#buttonStart>span');
 
     this.buttonStart.addEventListener('focusin', () => {
-        if(this.startGameStatus === false && this.isStartPointDown === false){
-          this.buttonStart.style.color = 'black';
-          this.buttonStart.style.backgroundColor = 'white';
-          this.buttonStart.style.borderRight = '8px solid #999999';
-          this.buttonStart.style.borderBottom = '8px solid #999999';
-          this.buttonStart.style.cursor = 'pointer';
-        }
+      if(this.startGameStatus === false && this.isStartPointDown === false){
+        this.buttonStart.style.color = 'black';
+        this.buttonStart.style.backgroundColor = 'white';
+        this.buttonStart.style.borderRight = '8px solid #999999';
+        this.buttonStart.style.borderBottom = '8px solid #999999';
+        this.buttonStart.style.cursor = 'pointer';
+      }
     });
 
     this.buttonStart.addEventListener('focusout', () => {
@@ -463,28 +466,32 @@ class Pong{
       this.buttonStart.style.fontSize = '40px';
     });
 
-    // this.buttonStart.addEventListener('keydown', (e) => {
-    //   if(e.key === 'Enter'){
-    //     if(this.startGameStatus === false && this.inputJ1.value !== '' && this.inputJ2.value !== '' && this.inputJ1.value !== ' ' && this.inputJ2.value !== ' '){
-    //       this.buttonStart.style.backgroundColor = 'black';
-    //       this.buttonStart.style.borderTop = '8px solid white';
-    //       this.buttonStart.style.borderLeft = '8px solid white';
-    //       this.buttonStart.style.cursor = 'inherit';
-    //       this.buttonStart.style.padding = 0;
-    //       this.buttonStart.style.color = 'white';
-    //       this.startGame();
-    //     }else if(this.startGameStatus === false && (this.inputJ1.value === '' && this.inputJ2.value === '') || 
-    //     (this.inputJ1.value === '' || this.inputJ2.value === '') || (this.inputJ1.value === ' ' && this.inputJ2.value === ' ') ||
-    //     (this.inputJ1.value === ' ' || this.inputJ2.value === ' ')){
-    //       this.buttonStart.style.borderRight = '8px solid #999999';
-    //       this.buttonStart.style.borderBottom = '8px solid #999999';
-    //       this.buttonStart.style.borderTop = '8px solid white';
-    //       this.buttonStart.style.borderLeft = '8px solid white';
-    //       this.buttonStart.style.fontSize = '40px';
-    //       txtButton.style.marginLeft = '0';
-    //     }
-    //   }
-    // });
+    this.buttonStart.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){
+        if(this.startGameStatus === false && this.inputJ1.value !== '' && this.inputJ2.value !== '' && this.inputJ1.value !== ' ' && this.inputJ2.value !== ' '){
+          this.buttonStart.style.backgroundColor = 'black';
+          this.buttonStart.style.borderTop = '8px solid white';
+          this.buttonStart.style.borderLeft = '8px solid white';
+          this.buttonStart.style.borderRight = '8px solid white';
+          this.buttonStart.style.borderBottom = '8px solid white';
+          this.buttonStart.style.cursor = 'inherit';
+          this.buttonStart.style.padding = 0;
+          this.buttonStart.style.color = 'white';
+          this.startGame();
+          this.checkErrorMsg();
+        }else if(this.startGameStatus === false && (this.inputJ1.value === '' && this.inputJ2.value === '') || 
+        (this.inputJ1.value === '' || this.inputJ2.value === '') || (this.inputJ1.value === ' ' && this.inputJ2.value === ' ') ||
+        (this.inputJ1.value === ' ' || this.inputJ2.value === ' ')){
+          this.buttonStart.style.borderRight = '8px solid #999999';
+          this.buttonStart.style.borderBottom = '8px solid #999999';
+          this.buttonStart.style.borderTop = '8px solid white';
+          this.buttonStart.style.borderLeft = '8px solid white';
+          this.buttonStart.style.fontSize = '40px';
+          txtButton.style.marginLeft = '0';
+          this.checkErrorMsg();
+        }
+      }
+    });
 
     this.buttonKey.button.addEventListener('focusin', () => {
       if(this.buttonKey.isPointerDown === false){
@@ -496,59 +503,17 @@ class Pong{
       this.buttonKey.mouseLeave();
     });
 
-    // this.buttonKey.button.addEventListener('keydown', (e) => {
-    //   if(e.key === 'Enter'){
-    //     this.buttonKey.open();
-    //   }
-    // });
+    this.buttonKey.button.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){
+        this.buttonKey.open();
+      }
+    });
 
-    // Click body, close button (check buttonKey)
-    // body.addEventListener('click', () => {
-    //   if(isClickButKey === true){
-    //     contentKeyJ1.style.opacity = 0;
-    //     contentKeyJ1.style.visibility = 'hidden';
-    //     contentKeyJ2.style.opacity = 0;
-    //     contentKeyJ2.style.visibility = 'hidden';
-        
-    //     setTimeout(() => {
-    //       this.buttonKey.style.width = '95px';
-    //       this.buttonKey.style.height = '55px';
-    //       this.buttonKey.style.cursor = 'pointer';
-    //       txtButton.style.visibility = 'visible';
-    //       txtButton.style.color = 'white';
-    //       txtButton.style.fontWeight = 'initial';
-    //       txtButton.style.transitionDelay = '0.8s';
-    //       txtButton.style.visibility = 'visible';
-    //       txtButton.style.opacity = 1;
-    //       iconArcade.style.background = "center/cover url('icon/arcadeWhite.png')";
-    //       iconArcade.style.visibility = 'visible';
-    //       iconArcade.style.opacity = 1;
-    //       iconArcade.style.transitionDelay = '0.8s';
-    //       contentKeyJ1.style.opacity = 0;
-    //       contentKeyJ1.style.visibility = 'hidden';
-    //       contentKeyJ1.style.width = '90px';
-    //       contentKeyJ1.style.height = '0';
-    //       contentKeyJ1.style.animationName = '';
-    //       contentKeyJ2.style.opacity = 0;
-    //       contentKeyJ2.style.visibility = 'hidden';
-    //       contentKeyJ2.style.width = '90px';
-    //       contentKeyJ2.style.height = '0';
-    //       contentKeyJ2.style.animationName = '';
-    //       keyZ.style.display = 'none';
-    //       keyS.style.display = 'none';
-    //       keyUp.style.display = 'none';
-    //       keyDown.style.display = 'none';
-    //       titleKeyJ1.remove();
-    //       keyZ.remove();
-    //       keyS.remove();
-    //       titleKeyJ2.remove();
-    //       keyUp.remove();
-    //       keyDown.remove();
-    //       isClickButKey = false;
-    //     }, 400);
-    //   }
-    // });
-
+    this.body.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){
+        this.buttonKey.close();
+      }
+    });
 
   }
 
@@ -775,7 +740,7 @@ class Pong{
           this.ball.speedY = 8;
         }
 
-        // Collision ball with plate J1 - J2 
+        // Collision ball with plate J1 - J2
         if(this.ball.xMiddle() >= this.plateJ2.X && this.ball.xMiddle() <= this.plateJ2.xW() && this.ball.yH() >= this.plateJ2.Y && this.ball.yH() <= this.plateJ2.yMiddle()){ // Top J2
           this.ball.speedY = -8;
         }else if(this.ball.xMiddle() >= this.plateJ2.X && this.ball.xMiddle() <= this.plateJ2.xW() && this.ball.Y <= this.plateJ2.yH() && this.ball.Y >= this.plateJ2.yMiddle()){ // Bottom J2
