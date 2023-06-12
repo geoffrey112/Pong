@@ -9,8 +9,12 @@ class Pong{
     this.startGameStatus = false;
     this.gameBoardHeight;
     this.gameBoardWidth;
-    this.scoreJ1 = '0';
-    this.scoreJ2 = '0';
+    this.p1 = document.createElement('p');
+    this.p2 = document.createElement('p');
+    this.elemScoreJ1 = document.createElement('span');
+    this.elemScoreJ2 = document.createElement('span');
+    this.scoreJ1 = 0;
+    this.scoreJ2 = 0;
     this.goalJ1 = false;
     this.goalJ2 = false;
 
@@ -232,7 +236,6 @@ class Pong{
   }
 
   // Resp
-  // Bug Button Key
   // Add Score
   // Check requestAnimation (better than setInterval)
 
@@ -246,6 +249,7 @@ class Pong{
     sessionStorage.setItem('cookieAnim', true);
   }
 
+
   animTitle(){
     const title = document.querySelector('h1');
 
@@ -253,6 +257,7 @@ class Pong{
       title.style.animationName = 'animTitle';
     }
   }
+
 
   animInputPlayer(){
     
@@ -268,6 +273,7 @@ class Pong{
       this.contentInput.style.opacity = 1;
     }
   }
+
 
   animButtonStart(){
 
@@ -349,6 +355,7 @@ class Pong{
     });
   }
 
+
   keyButton(){
 
     this.buttonKey.contentJ1.classList.add('contentKeyJ1');
@@ -407,6 +414,7 @@ class Pong{
 
   }
 
+
   errorMsgInput(){
 
     let errorMsg = document.createElement('p');
@@ -442,6 +450,7 @@ class Pong{
 
   }
 
+
   tabButton(){
 
     const txtButton = document.querySelector('#buttonStart>span');
@@ -457,13 +466,15 @@ class Pong{
     });
 
     this.buttonStart.addEventListener('focusout', () => {
-      this.buttonStart.style.color = 'white';
-      this.buttonStart.style.backgroundColor = 'black';
-      this.buttonStart.style.borderRight = '8px solid white';
-      this.buttonStart.style.borderBottom = '8px solid white';
-      this.buttonStart.style.borderLeft = '8px solid white';
-      this.buttonStart.style.borderTop = '8px solid white';
-      this.buttonStart.style.fontSize = '40px';
+      if(this.startGameStatus === false){
+        this.buttonStart.style.color = 'white';
+        this.buttonStart.style.backgroundColor = 'black';
+        this.buttonStart.style.borderRight = '8px solid white';
+        this.buttonStart.style.borderBottom = '8px solid white';
+        this.buttonStart.style.borderLeft = '8px solid white';
+        this.buttonStart.style.borderTop = '8px solid white';
+        this.buttonStart.style.fontSize = '40px';
+      }
     });
 
     this.buttonStart.addEventListener('keydown', (e) => {
@@ -517,28 +528,25 @@ class Pong{
 
   }
 
+
   startGame(){
 
     const title = document.querySelector('h1');
     const contentNameScore = document.createElement('div');
-    const p1 = document.createElement('p');
-    const p2 = document.createElement('p');
-    const elemScoreJ1 = document.createElement('span');
-    const elemScoreJ2 = document.createElement('span');
     const middleLine = document.createElement('div'); // absolute
 
     document.querySelector('#buttonStart > span').remove();
     middleLine.id = 'middleLine';
     this.buttonStart.prepend(middleLine);
 
-    p1.id = 'nameJ1';
-    p2.id = 'nameJ2';
-    p1.innerText = `${this.inputJ1.value}: `;
-    p2.innerText = `${this.inputJ2.value}: `;
-    elemScoreJ1.id = 'scoreJ1';
-    elemScoreJ2.id = 'scoreJ2';
-    elemScoreJ1.innerText = `${this.scoreJ1}`;
-    elemScoreJ2.innerText = `${this.scoreJ2}`;
+    this.p1.id = 'nameJ1';
+    this.p2.id = 'nameJ2';
+    this.p1.innerText = `${this.inputJ1.value}: `;
+    this.p2.innerText = `${this.inputJ2.value}: `;
+    this.elemScoreJ1.id = 'scoreJ1';
+    this.elemScoreJ2.id = 'scoreJ2';
+    this.elemScoreJ1.innerText = `${this.scoreJ1}`;
+    this.elemScoreJ2.innerText = `${this.scoreJ2}`;
     contentNameScore.id = 'contentNameScore';
 
     this.plateJ1.elem.id = this.plateJ1.id;
@@ -549,18 +557,19 @@ class Pong{
     this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
     this.startGameStatus = true;
 
-    // Zoom buttonStart, enlarge size line, add score
+    // Zoom buttonStart, enlarge middle size line, add score
     setTimeout(() => {
       this.buttonStart.style.animationName = 'boardZoomStart';
 
       middleLine.style.transitionDuration = '1.9s';
       middleLine.style.borderLeft = '6px dashed white';
 
-      p1.append(elemScoreJ1);
-      p2.append(elemScoreJ2);
-      contentNameScore.prepend(p1);
-      contentNameScore.append(p2);
+      this.p1.append(this.elemScoreJ1);
+      this.p2.append(this.elemScoreJ2);
+      contentNameScore.prepend(this.p1);
+      contentNameScore.append(this.p2);
       this.buttonStart.prepend(contentNameScore);
+      this.buttonKey.button.style.zIndex = 0;
 
     },1000);
 
@@ -589,7 +598,7 @@ class Pong{
 
       // this.countdown();
       this.movePlayers() // (remove after test)
-      this.collision()    // (remove after test)
+      this.collision();  // (remove after test)
       this.responsive(); // (remove after test)
     }, 3050);
   }
@@ -616,19 +625,6 @@ class Pong{
   //   }, 1000);
   // }
 
-  responsive(){
-
-    window.addEventListener('resize', () => {
-      this.gameBoardHeight = this.buttonStart.clientHeight;
-      this.gameBoardWidth = this.buttonStart.clientWidth;
-
-      // Responsive ball when goal (J2)
-      if(this.goalJ2 === true){
-        this.ball.X = this.gameBoardWidth - this.ball.elem.offsetWidth;
-      }
-    });
-
-  }
 
   movePlayers(){
 
@@ -722,6 +718,7 @@ class Pong{
     
   }
   
+
   collision(){
 
     // let centerPlateJ2 = this.plateJ2.Y + (this.plateJ2.height / 2);
@@ -757,26 +754,71 @@ class Pong{
         
         this.ball.X += this.ball.speedX;
         this.ball.Y += this.ball.speedY;
-
+        
       }else{ // Goal
-        goal = true;
 
+        clearInterval(this.ball.interval);
+
+        goal = true;
+        
         if(this.ball.X <= 0){
           this.goalJ1 = true;
         }
-
+        
         if(this.ball.xW() >= this.gameBoardWidth){
           this.goalJ2 = true;
         }
+        
+        this.addScore();
 
       }
 
       this.ball.elem.style.transform = `translate(${this.ball.X}px, ${this.ball.Y}px)`;
 
     }, 20);
+  }
 
 
+  addScore(){
 
+    this.p2.style.fontSize = '60px';
+    this.p2.style.transitionDuration = '0.5s';
+
+    setTimeout(() => {
+      if(this.goalJ1 === true){
+        this.scoreJ1 += 1;
+        this.elemScoreJ1.innerHTML = this.scoreJ1;
+      }
+  
+      if(this.goalJ2 === true){
+        this.scoreJ2 += 1;
+        this.elemScoreJ2.innerHTML = this.scoreJ2;
+      }
+    }, 500);
+
+    setTimeout(() => {
+      if(this.goalJ1 === true){
+        this.p1.style.fontSize = '40px';
+      }
+
+      if(this.goalJ2 === true){
+        this.p2.style.fontSize = '40px';   
+      }
+    }, 600);
+  }
+
+
+  responsive(){
+
+    window.addEventListener('resize', () => {
+      this.gameBoardHeight = this.buttonStart.clientHeight;
+      this.gameBoardWidth = this.buttonStart.clientWidth;
+
+      // Responsive ball when goal (J2)
+      if(this.goalJ2 === true){
+        this.ball.X = this.gameBoardWidth - this.ball.elem.offsetWidth;
+      }
+    });
   }
 
 }

@@ -167,6 +167,7 @@ h1{
   font-size: 30px;
   padding:10px;
   border:8px outset white;
+  background-color:black;
   border-radius: 20px;
   position: absolute;
   right:50px;
@@ -176,7 +177,7 @@ h1{
   cursor: pointer;
   color:white;
   display: flex;
-  z-index:0;
+  z-index:1;
 }
 
 #iconArcade{
@@ -289,10 +290,12 @@ h1{
 
 #scoreJ1{
   color:#0066ff;
+  font-weight: bold;
 }
 
 #scoreJ2{
   color:#ff0000;
+  font-weight: bold;
 }
 
 #ball{
