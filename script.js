@@ -17,6 +17,7 @@ class Pong{
     this.scoreJ2 = 0;
     this.goalJ1 = false;
     this.goalJ2 = false;
+    this.statusGoal = false;
 
     this.buttonKey = {
       button: document.getElementById('buttonKey'),
@@ -173,7 +174,7 @@ class Pong{
         return borderBottom;
       },
       yMiddle: function(){
-        const middleOfPlate = this.Y + this.elem.offsetHeight / 2; 
+        const middleOfPlate = this.Y + this.elem.offsetHeight / 2;
         return middleOfPlate;
       },
       xW: function(){
@@ -212,7 +213,7 @@ class Pong{
       speedX: 8,
       speedY: 8,
       xMiddle: function(){
-        const middleOfBall = this.X + this.elem.offsetWidth / 2;
+        const middleOfBall = this.X + this.elem.offsetWidth / 2
         return middleOfBall;
       },
 
@@ -231,13 +232,12 @@ class Pong{
         return ballHeight;
       },
 
-      interval: null
     };
   }
 
-  // Resp
-  // Add Score
+  // Resp (mainScreen + ball)
   // Check requestAnimation (better than setInterval)
+  // loading (ball bounced on plate)
 
   init(){
     this.animTitle();
@@ -554,10 +554,9 @@ class Pong{
 
     this.ball.elem.id = this.ball.id;
     this.ball.elem.style.transitionDuration = '0s';
-    this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
     this.startGameStatus = true;
 
-    // Zoom buttonStart, enlarge middle size line, add score
+    // Zoom buttonStart, enlarge size of middle line, add score
     setTimeout(() => {
       this.buttonStart.style.animationName = 'boardZoomStart';
 
@@ -596,8 +595,14 @@ class Pong{
       this.buttonStart.style.borderLeft = '0';
       this.buttonStart.style.borderRight = '0';
 
+      // this.gameBoardWidth = this.buttonStart.clientWidth;
+      // this.gameBoardHeight = this.buttonStart.clientHeight;
+      // this.ball.X = this.gameBoardWidth / 3;
+      // this.ball.Y = this.gameBoardHeight / 3;
+      this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
+      
       // this.countdown();
-      this.movePlayers() // (remove after test)
+      this.movePlayers(); // (remove after test)
       this.collision();  // (remove after test)
       this.responsive(); // (remove after test)
     }, 3050);
@@ -723,12 +728,11 @@ class Pong{
 
     // let centerPlateJ2 = this.plateJ2.Y + (this.plateJ2.height / 2);
     // switch(this.ball){} // With centerPlate (divide plate & hit ball on plate with speed - / +)
-    
-    let goal = false;
 
-    this.ball.interval = setInterval(() => {
 
-      if(this.ball.X > 0 && this.ball.xW() < this.gameBoardWidth && goal === false){
+    setInterval(() => {
+
+      if(this.ball.X > 0 && this.ball.xW() < this.gameBoardWidth && this.goalJ1 === false && this.goalJ2 === false){
 
         // Collision ball with border (top - bottom)
         if(this.ball.yH() >= this.gameBoardHeight){
@@ -754,57 +758,60 @@ class Pong{
         
         this.ball.X += this.ball.speedX;
         this.ball.Y += this.ball.speedY;
+      }
         
-      }else{ // Goal
-
-        clearInterval(this.ball.interval);
-
-        goal = true;
-        
-        if(this.ball.X <= 0){
-          this.goalJ1 = true;
-        }
-        
-        if(this.ball.xW() >= this.gameBoardWidth){
-          this.goalJ2 = true;
-        }
-        
-        this.addScore();
-
+      if(this.ball.X <= 0 && this.statusGoal === false){
+        this.goalJ1 = true;
+      }
+      
+      if(this.ball.xW() >= this.gameBoardWidth && this.statusGoal === false){
+        this.goalJ2 = true;
       }
 
       this.ball.elem.style.transform = `translate(${this.ball.X}px, ${this.ball.Y}px)`;
+      this.addScore();
 
     }, 20);
+    
   }
 
 
   addScore(){
 
-    this.p2.style.fontSize = '60px';
-    this.p2.style.transitionDuration = '0.5s';
+    // Reset game when goal
 
-    setTimeout(() => {
-      if(this.goalJ1 === true){
-        this.scoreJ1 += 1;
-        this.elemScoreJ1.innerHTML = this.scoreJ1;
-      }
-  
-      if(this.goalJ2 === true){
+    if(this.goalJ2 === true){
+      this.goalJ2 = false;
+      this.statusGoal = true;
+      this.p2.style.fontSize = '60px';
+      this.p2.style.transitionDuration = '0.5s';
+
+      setTimeout(() => {
         this.scoreJ2 += 1;
         this.elemScoreJ2.innerHTML = this.scoreJ2;
-      }
-    }, 500);
+      }, 500);
 
-    setTimeout(() => {
-      if(this.goalJ1 === true){
+      setTimeout(() => {
+        this.p2.style.fontSize = '40px';
+      }, 600);
+    }
+
+    if(this.goalJ1 === true){
+      this.goalJ1 = false;
+      this.statusGoal = true;
+      this.p1.style.fontSize = '60px';
+      this.p1.style.transitionDuration = '0.5s';
+
+      setTimeout(() => {
+        this.scoreJ1 += 1;
+        this.elemScoreJ1.innerHTML = this.scoreJ1;
+      }, 500);
+
+      setTimeout(() => {
         this.p1.style.fontSize = '40px';
-      }
+      }, 600);
+    }
 
-      if(this.goalJ2 === true){
-        this.p2.style.fontSize = '40px';   
-      }
-    }, 600);
   }
 
 
@@ -814,10 +821,7 @@ class Pong{
       this.gameBoardHeight = this.buttonStart.clientHeight;
       this.gameBoardWidth = this.buttonStart.clientWidth;
 
-      // Responsive ball when goal (J2)
-      if(this.goalJ2 === true){
-        this.ball.X = this.gameBoardWidth - this.ball.elem.offsetWidth;
-      }
+      
     });
   }
 
