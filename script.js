@@ -11,13 +11,14 @@ class Pong{
     this.gameBoardWidth;
     this.p1 = document.createElement('p');
     this.p2 = document.createElement('p');
-    this.elemScoreJ1 = document.createElement('span');
-    this.elemScoreJ2 = document.createElement('span');
+    this.textScoreJ1 = document.createElement('span');
+    this.textScoreJ2 = document.createElement('span');
     this.scoreJ1 = 0;
     this.scoreJ2 = 0;
     this.goalJ1 = false;
     this.goalJ2 = false;
     this.statusGoal = false;
+    this.inGame = false;
 
     this.buttonKey = {
       button: document.getElementById('buttonKey'),
@@ -543,10 +544,10 @@ class Pong{
     this.p2.id = 'nameJ2';
     this.p1.innerText = `${this.inputJ1.value}: `;
     this.p2.innerText = `${this.inputJ2.value}: `;
-    this.elemScoreJ1.id = 'scoreJ1';
-    this.elemScoreJ2.id = 'scoreJ2';
-    this.elemScoreJ1.innerText = `${this.scoreJ1}`;
-    this.elemScoreJ2.innerText = `${this.scoreJ2}`;
+    this.textScoreJ1.id = 'scoreJ1';
+    this.textScoreJ2.id = 'scoreJ2';
+    this.textScoreJ1.innerText = `${this.scoreJ1}`;
+    this.textScoreJ2.innerText = `${this.scoreJ2}`;
     contentNameScore.id = 'contentNameScore';
 
     this.plateJ1.elem.id = this.plateJ1.id;
@@ -563,8 +564,8 @@ class Pong{
       middleLine.style.transitionDuration = '1.9s';
       middleLine.style.borderLeft = '6px dashed white';
 
-      this.p1.append(this.elemScoreJ1);
-      this.p2.append(this.elemScoreJ2);
+      this.p1.append(this.textScoreJ1);
+      this.p2.append(this.textScoreJ2);
       contentNameScore.prepend(this.p1);
       contentNameScore.append(this.p2);
       this.buttonStart.prepend(contentNameScore);
@@ -595,40 +596,40 @@ class Pong{
       this.buttonStart.style.borderLeft = '0';
       this.buttonStart.style.borderRight = '0';
 
-      // this.gameBoardWidth = this.buttonStart.clientWidth;
-      // this.gameBoardHeight = this.buttonStart.clientHeight;
-      // this.ball.X = this.gameBoardWidth / 3;
-      // this.ball.Y = this.gameBoardHeight / 3;
       this.ball.elem.style.transform = `translate(${this.ball.X}px,${this.ball.Y}px)`;
       
-      // this.countdown();
-      this.movePlayers(); // (remove after test)
-      this.collision();  // (remove after test)
-      this.responsive(); // (remove after test)
+      this.countdown();
     }, 3050);
   }
 
-  // countdown(){
-  //   const timer = document.createElement('div');
-  //   let count = 3;
-  //   let interval;
 
-  //   timer.id = 'timerCountdown';
-  //   this.buttonStart.append(timer);
+  countdown(){
+    const timer = document.createElement('div');
+    let count = 3;
+    let interval;
+
+    timer.id = 'timerCountdown';
+    this.buttonStart.append(timer);
     
-  //   interval = setInterval(() => {
-  //     if(count > 0){
-  //       timer.innerText = count;
-  //       --count;
-  //     }else{
-  //       clearInterval(interval);
-  //       timer.remove();
-  //       this.movePlayers();
-  //       this.collision();
-  //       this.responsive();
-  //     }
-  //   }, 1000);
-  // }
+    interval = setInterval(() => {
+      if(count > 0){
+        timer.innerText = count;
+        --count;
+      }else{
+        clearInterval(interval);
+        timer.remove();
+
+        if(this.inGame === false){
+          this.inGame = true;
+          this.movePlayers();
+          this.collision();
+          this.responsive();
+        }
+      }
+    }, 1000);
+
+    // PlateJ1 top left + PlateJ2 none 
+  }
 
 
   movePlayers(){
@@ -651,7 +652,7 @@ class Pong{
 
     body.addEventListener('keydown', (e) => {
       // Player 1
-      if(e.key === 'z'){
+      if(e.key === 'z'){ // (var allowMovement for start game)
         stateKeyUpJ1 = true;
       }else if(e.key === 's'){
         stateKeyDownJ1 = true;
@@ -729,7 +730,6 @@ class Pong{
     // let centerPlateJ2 = this.plateJ2.Y + (this.plateJ2.height / 2);
     // switch(this.ball){} // With centerPlate (divide plate & hit ball on plate with speed - / +)
 
-
     setInterval(() => {
 
       if(this.ball.X > 0 && this.ball.xW() < this.gameBoardWidth && this.goalJ1 === false && this.goalJ2 === false){
@@ -772,46 +772,61 @@ class Pong{
       this.addScore();
 
     }, 20);
-    
+
   }
 
 
   addScore(){
 
-    // Reset game when goal
-
     if(this.goalJ2 === true){
       this.goalJ2 = false;
-      this.statusGoal = true;
-      this.p2.style.fontSize = '60px';
-      this.p2.style.transitionDuration = '0.5s';
-
-      setTimeout(() => {
-        this.scoreJ2 += 1;
-        this.elemScoreJ2.innerHTML = this.scoreJ2;
-      }, 500);
-
-      setTimeout(() => {
-        this.p2.style.fontSize = '40px';
-      }, 600);
-    }
-
-    if(this.goalJ1 === true){
-      this.goalJ1 = false;
       this.statusGoal = true;
       this.p1.style.fontSize = '60px';
       this.p1.style.transitionDuration = '0.5s';
 
       setTimeout(() => {
         this.scoreJ1 += 1;
-        this.elemScoreJ1.innerHTML = this.scoreJ1;
+        this.textScoreJ1.innerHTML = this.scoreJ1;
       }, 500);
 
       setTimeout(() => {
         this.p1.style.fontSize = '40px';
       }, 600);
+
+      setTimeout(() => {
+        this.reset();
+      }, 800);
     }
 
+    if(this.goalJ1 === true){
+      this.goalJ1 = false;
+      this.statusGoal = true;
+      this.p2.style.fontSize = '60px';
+      this.p2.style.transitionDuration = '0.5s';
+
+      setTimeout(() => {
+        this.scoreJ2 += 1;
+        this.textScoreJ2.innerHTML = this.scoreJ2;
+      }, 500);
+
+      setTimeout(() => {
+        this.p2.style.fontSize = '40px';
+      }, 600);
+
+      setTimeout(() => {
+        this.reset();
+      }, 800);
+    }
+
+  }
+
+  
+  reset(){
+    this.ball.X = 500;
+    this.ball.Y = 200;
+    this.ball.speedX = 8;
+    this.ball.speedY = 8;
+    this.statusGoal = false; 
   }
 
 
