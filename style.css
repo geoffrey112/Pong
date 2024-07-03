@@ -8,36 +8,37 @@ body{
 }
 
 h1{
-  font-size:90px;
+  font-size:70px;
   color:white;
-  opacity:1;
   margin:0;
   text-align: center;
-  animation-duration: 3s;
-  animation-name: animTitle;
+  animation: 3s forwards fadeIn_title;
 }
 
 .contentCard{
   display: flex;
   justify-content: center;
-  margin-top:50px;
-  /* background-color: lightgray; */
+  margin-top:120px;
+  animation: 3s 1.5s forwards fadeIn_card;
+  /* opacity:0; */
 }
 
 .card1{
   transform-style: preserve-3d;
   perspective: 850px;
   perspective-origin: -100px 250px;
-  width:330px;
+  width:220px;
   height:220px;
+  margin-right:70px;
 }
 
 .card2{
   transform-style: preserve-3d;
   perspective: 850px;
   perspective-origin: 300px 250px;
-  width:260px;
+  width:220px;
   height:220px;
+  margin-left:70px;
 }
 
 .face{
@@ -49,6 +50,7 @@ h1{
 .front1{
   transform: translateZ(100px);
   background: radial-gradient(circle at 20%, #3057d4, #021553);
+  right:0;
 }
 
 .front2{
@@ -59,6 +61,7 @@ h1{
 .left{
   transform: rotateY(-90deg) translateZ(100px);
   background: linear-gradient(to left,#2c4fc1, #2d2d88fd);
+  right:0;
 }
 
 .right{
@@ -69,6 +72,7 @@ h1{
 .bottom1{
   transform:rotateX(90deg) translateZ(-100px);
   background: linear-gradient(to right, #192b65, #1c1c5dfd);
+  right:0;
 }
 
 .bottom2{
@@ -102,13 +106,38 @@ input{
 }
 
 .front1 > input{
-  background-color: #92b5ff;
-  /* background: radial-gradient(circle at 20%, #3057d4, #021553); */
+  background: radial-gradient(circle at 10%, #465790, #4a69d1);
+  color:white;
+  border-color:#1f428d;
 }
 
 .front2 > input{
-  background-color: #ff9292;
-  /* background: radial-gradient(circle at 20%, #d43030, #530202); */
+  background: radial-gradient(circle at 10%, #863131, #d24646);
+  color:white;
+  border-color:#8d1f1f;
+}
+
+:where(.front1, .front2) > input:focus{
+  outline: none;
+}
+
+#buttonStart{
+  color:white;
+  width: fit-content;
+  margin: auto;
+  font-size: 30px;
+  padding:8px 15px;
+  border-radius: 25px;
+  border: 6px solid white;
+  margin-top:50px;
+  /* opacity:0; */
+  animation: 3s 2s forwards fadeIn_startBtn;
+}
+
+#buttonStart:hover{
+  background-color: white;
+  color:black;
+  border-color: white #999999 #999999 white;
 }
 
 
@@ -117,15 +146,45 @@ input{
 
 
 
-
-@keyframes animTitle{
+/* @keyframes fadeIn_title{
   from{
-    font-size: 80px;
+    font-size: 50px;
     opacity: 0;
+    visibility: hidden;
   }
 
   to{
-    font-size: 90px;
+    font-size: 70px;
     opacity: 1;
+    visibility: visible;
   }
 }
+
+@keyframes fadeIn_card{
+  from{
+    transform:translateY(-50px);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to{
+    transform:translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes fadeIn_startBtn{
+  from{
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(50px);
+  }
+
+  to{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0px);
+  }
+} */
+
