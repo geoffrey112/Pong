@@ -106,13 +106,13 @@ input{
 }
 
 .front1 > input{
-  background: radial-gradient(circle at 10%, #465790, #4a69d1);
+  background: radial-gradient(circle at 10%, #4a69d1, #8898cd);
   color:white;
   border-color:#1f428d;
 }
 
 .front2 > input{
-  background: radial-gradient(circle at 10%, #863131, #d24646);
+  background: radial-gradient(circle at 10%, #d14a4a, #cd8888);
   color:white;
   border-color:#8d1f1f;
 }
@@ -122,23 +122,90 @@ input{
 }
 
 #buttonStart{
+  width:190px;
+  height:80px;
   color:white;
-  width: fit-content;
   margin: auto;
   font-size: 30px;
-  padding:8px 15px;
   border-radius: 25px;
   border: 6px solid white;
   margin-top:50px;
+  position: relative;
   /* opacity:0; */
   animation: 3s 2s forwards fadeIn_startBtn;
+  transition-duration: 0.5s;
+  transition-property: box-shadow, border-color, transform;
+  cursor: pointer;
 }
 
 #buttonStart:hover{
   background-color: white;
   color:black;
   border-color: white #999999 #999999 white;
+  box-shadow: 2px 2px 10px 0 #ffffff9e;
+  transform: translate(-2px, -2px);
 }
+
+#buttonStart > span{
+  border-radius: 25px;
+  border:6px solid transparent;
+  text-align: center;
+  width:100%;
+  height:fit-content;
+  padding: 12px 0;
+  position: absolute;
+  left:-6px;
+  top:-6px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#buttonKey{
+  width: 110px;
+  height: 70px;
+  color:white;
+  font-size: 30px;
+  border-radius: 25px;
+  border: 6px solid white;
+  position: absolute;
+  right:60px;
+  bottom:60px;
+  cursor: pointer;
+  /* opacity:0; */
+  animation: 3s 2.5s forwards fadeIn_keyBtn;
+  transition-duration: 0.5s;
+  transition-property: box-shadow, border-color, transform;
+}
+
+#buttonKey:hover{
+  background-color: white;
+  color:black;
+  border-color: white #999999 #999999 white;
+  box-shadow: 2px 2px 10px 0 #ffffff9e;
+  transform: translate(-2px, -2px);
+}
+
+#containerKey{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 25px;
+  border:6px solid transparent;
+  position:absolute;
+  left:-6px;
+  top:-6px;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#iconKey{
+  width:40px;
+  height:40px;
+  background: center/cover url('icon/arcadeWhite.png');
+}
+
 
 
 
@@ -186,5 +253,72 @@ input{
     visibility: visible;
     transform: translateY(0px);
   }
+}
+
+@keyframes fadeIn_keyBtn{
+  from{
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to{
+    opacity: 1;
+    visibility: visible;
+  }
 } */
+
+
+@media (max-width: 767.98px){
+
+  h1{
+    font-size:60px;
+  }
+
+  .card1{
+    width:180px;
+    height:180px;
+    margin-right:50px;
+  }
+  
+  .card2{
+    width:180px;
+    height:180px;
+    margin-left:50px;
+  }
+
+  h2{
+    margin:15px 0 10px 0;
+  }
+  
+  .face{
+    width:160px;
+    height:160px;
+  }
+  
+  .front1, .front2{
+    transform: translateZ(80px);
+  }
+  
+  .left{
+    transform: rotateY(-90deg) translateZ(80px);
+  }
+  
+  .right{
+    transform: rotateY(90deg) translateZ(80px);
+  }
+  
+  .bottom1{
+    transform:rotateX(90deg) translateZ(-80px);
+  }
+
+  .bottom2{
+    transform:rotateX(90deg) translateZ(-80px);
+  }
+}
+
+
+
+
+
+
 
