@@ -110,12 +110,14 @@ input{
   background: radial-gradient(circle at 10%, #4a69d1, #8898cd);
   color:white;
   border-color:#1f428d;
+  text-align: center;
 }
 
 .front2 > input{
   background: radial-gradient(circle at 10%, #d14a4a, #cd8888);
   color:white;
   border-color:#8d1f1f;
+  text-align: center;
 }
 
 :where(.front1, .front2) > input:focus{
@@ -241,12 +243,14 @@ input{
     opacity: 1;
     visibility: visible;
     transition-duration: 1s;
+    transition-delay: 1s;
   }
 
   .containKeyOut{
     opacity: 0;
     visibility: hidden;
     transition-duration: 1s;
+    transition-delay: 0s;
   }
 
   .openKey{
