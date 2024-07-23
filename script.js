@@ -12,6 +12,7 @@ let isKeyMoving = false;
 const inputJ1 = document.getElementsByName('j1')[0];
 const inputJ2 = document.getElementsByName('j2')[0];
 
+
 // Design startButton & keyButton
 events.forEach((event) => {
   btnStart.addEventListener(event, function(e){
@@ -29,6 +30,10 @@ btnKey.addEventListener('click', openKeyBtn);
 document.addEventListener('click', function(e){
   closeKeyBtn(e);
 });
+
+// Disable more than 2 spaces
+inputJ1.addEventListener('input', statusSpace);
+inputJ2.addEventListener('input', statusSpace);
 
 // Start Game
 btnStart.addEventListener('click', function(){
@@ -141,12 +146,19 @@ function closeKeyBtn(event){
 }
 
 
+function statusSpace(event){
+
+  const findSpace = /\s{2}/g;
+
+  if(findSpace.test(event.target.value)){
+    event.target.value = event.target.value.replace(findSpace, ' ');
+  }
+}
+
+
 function checkInput(){
 
   const errorMsg = document.getElementById('errorMsg');
-  const findSpace = /\s/g;
-
-  console.log(findSpace.test(inputJ1.value));
 
   const animErrorMsg = () => {
     errorMsg.animate([
@@ -157,14 +169,6 @@ function checkInput(){
       duration: 200,
       easing: 'ease-in-out'
     });
-  }
-
-  const disableSpace = (e) => {
-
-  }
-
-  const enableSpace = () => {
-    
   }
 
 

@@ -259,6 +259,7 @@ input{
     transition-delay: 0.5s;
     transition-duration: 1s;
     transition-property: width, height;
+    cursor: default;
   }
 
   .closeKey{
