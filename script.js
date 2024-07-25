@@ -1,7 +1,7 @@
 const btnStart = document.getElementsByClassName('buttonStart')[0];
 const txtStart = document.querySelector('.buttonStart > span');
 const events = ['pointerdown', 'pointerup', 'mouseover', 'mouseout', 'click'];
-// let isGameStart = false;
+let gameStart = false;
 
 const btnKey = document.getElementsByClassName('buttonKey')[0];
 const containKey = document.getElementById('containerKey');
@@ -20,7 +20,9 @@ events.forEach((event) => {
   });
   
   btnKey.addEventListener(event, function(e){
-    changeColorBtn(e, btnKey, containKey, iconKey);
+    if(isKeyOpen === false && isKeyMoving === false){
+      changeColorBtn(e, btnKey, containKey, iconKey);
+    }
   });
 });
 
@@ -41,10 +43,9 @@ btnStart.addEventListener('click', function(){
 });
 
 
-
 function changeColorBtn(event, elem, txt, icon){
 
-  if(isKeyOpen === false && isKeyMoving === false){
+  if(gameStart === false){
     if(event.type === 'pointerdown'){
       elem.classList.remove('buttonHover', 'buttonSlow');
       elem.classList.add('buttonDown', 'buttonFast');
@@ -57,25 +58,21 @@ function changeColorBtn(event, elem, txt, icon){
       elem.classList.add('buttonHover', 'buttonSlow');
       elem.classList.remove('buttonFast');
       icon ? icon.style.background = 'center/cover url(icon/arcadeBlack.png)': null;
-      containKey.classList.remove('containKeyIn');
     }else if(event.type === 'mouseout'){
       elem.classList.remove('buttonHover', 'buttonDown', 'buttonFast');
       elem.classList.add('buttonSlow');
       txt.style.transform = 'translate(0, 0)';
       icon ? icon.style.background = 'center/cover url(icon/arcadeWhite.png)': null;
-      containKey.classList.remove('containKeyIn');
     }else if(event.type === 'click'){
       icon ? icon.style.background = 'center/cover url(icon/arcadeWhite.png)': null;
     }
-
   }
-
 }
 
 
 function openKeyBtn(){
 
-  if(isKeyOpen === false){
+  if(isKeyOpen === false && gameStart === false){
     const containCardKey = document.createElement('div');
     const cardKey1 = document.createElement('div');
     const cardKey2 = document.createElement('div');
@@ -115,7 +112,6 @@ function openKeyBtn(){
     isKeyOpen = true;
     isKeyMoving = true;
   }
-
 }
 
 
@@ -135,6 +131,7 @@ function closeKeyBtn(event){
       },500);
       setTimeout(() => {
         btnKey.classList.remove('closeKey');
+        containKey.classList.remove('containKeyIn');
         isKeyMoving = false;
       }, 1500);
 
@@ -142,7 +139,6 @@ function closeKeyBtn(event){
 
     }
   }
-
 }
 
 
@@ -171,7 +167,6 @@ function checkInput(){
     });
   }
 
-
   if((inputJ1.value === '' || inputJ1.value === ' ') && (inputJ2.value === '' || inputJ2.value === ' ')){
     errorMsg.textContent = "Enter player 1 & 2";
     animErrorMsg();
@@ -183,9 +178,30 @@ function checkInput(){
     animErrorMsg();
   }else if(inputJ1.value !== '' || inputJ1.value !== ' ' && inputJ2.value !== '' || inputJ2.value !== ' '){
     errorMsg.textContent = "";
+    gameLaunch();
   }
+}
+
+
+function gameLaunch(){
+
+  // Middle line dotted qui descend
+
+  // const line = document.createElement('div');
+  const contentCard = document.getElementsByClassName('contentCard')[0];
+  const title = document.querySelector('h1');
+
+  gameStart = true;
+
+  btnStart.classList.remove('buttonFast', 'buttonHover');
+  btnStart.classList.add('launch');
+  txtStart.classList.add('txtStartFadeOut');
+  title.classList.add('fadeOutElem');
+  contentCard.classList.add('fadeOutElem');
+  btnKey.classList.add('fadeOutElem');
   
-};
+  
+}
 
 
 
