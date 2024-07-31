@@ -13,15 +13,15 @@ h1{
   color:white;
   margin:0;
   text-align: center;
-  animation: 3s forwards fadeIn_title;
+  /* animation: 3s forwards fadeIn_title; */
 }
 
 .contentCard{
   display: flex;
   justify-content: center;
   margin-top:120px;
-  animation: 3s 1.5s forwards fadeIn_card;
-  opacity:0;
+  /* animation: 3s 1.5s forwards fadeIn_card;
+  opacity:0; */
 }
 
 .card1{
@@ -135,8 +135,8 @@ input{
   border: 6px solid white;
   margin-top:30px;
   position: relative;
-  opacity:0;
-  animation: 3s 2s forwards fadeIn_startBtn;
+  /* opacity:0;
+  animation: 3s 2s forwards fadeIn_startBtn; */
   transition-duration: 0.5s;
   transition-property: box-shadow, border-color, transform;
   cursor: pointer;
@@ -173,8 +173,8 @@ input{
   align-items: center;
   justify-content: space-around;
   overflow: hidden;
-  opacity:0;
-  animation: 3s 2.5s forwards fadeIn_keyBtn;
+  /* opacity:0;
+  animation: 3s 2.5s forwards fadeIn_keyBtn; */
   transition-duration: 0.5s;
   transition-property: box-shadow, border-color, transform;
   z-index:1;
@@ -203,7 +203,7 @@ input{
 }
 
 
-/* add in JS */
+/*** add in JS ***/
   .buttonDown{
     border-color : #999999 white white #999999;
     transform : translate(0, 0);
@@ -349,19 +349,69 @@ input{
   }
 
   .launch{
-    animation: 2s 1s forwards openButtonStart;
+    animation: 2s 0.5s forwards openButtonStart;
     cursor: default;
     opacity: 1;
     z-index: 2;
   }
 
   .fadeOutElem{
-    animation-name: fadeOut_homeElem;
-    animation-duration: 2s;
-    animation-delay: 1s;
+    animation:1s 2s forwards fadeOut_elem;
     opacity: 1;
   }
 
+  /*** InGame ***/
+  .lineGame{
+    width:0.5px;
+    height:0;
+    border: 4px dashed white;
+    border-left:0;
+    margin: auto;
+    box-sizing: border-box;
+    animation:2s 0s forwards lineHeight;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .contentPlayer{
+    width:100%;
+    height:fit-content;
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .titleJ1{
+    font-weight: bold;
+    font-size: 33px;
+    background: radial-gradient(ellipse 90% 20% at 50% 55%, #6085ff 10%, #3057d4 100%);
+    background-clip: text;
+    color: transparent;
+    animation: 2s 0.5s forwards fadeIn_elem;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .titleJ2{
+    font-weight: bold;
+    font-size: 33px;
+    background: radial-gradient(ellipse 90% 20% at 50% 55%, #ff7e7e 10%, #d43030 100%);
+    background-clip: text;
+    color: transparent;
+    animation: 2s 0.5s forwards fadeIn_elem;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .paddle{
+    width:10px;
+    height:120px;
+    position: absolute;
+    background-color: white;
+    animation: 2s 0.5s forwards fadeIn_elem;
+    visibility: hidden;
+    opacity: 0;
+  }
 
 
 /*****/
@@ -421,20 +471,6 @@ input{
   }
 }
 
-/*** Fade out home elem when start ***/
-@keyframes fadeOut_homeElem{
-  from{
-    opacity:1;
-    visibility: visible;
-  }
-
-  to{
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-/*** Open Button Start ***/
 @keyframes openButtonStart{
   0%{
     width:190px;
@@ -453,8 +489,48 @@ input{
     height:100%;
     margin-top:0px;
     border-radius: 0px;
+    border-left-color: transparent;
+    border-right-color: transparent;
     box-sizing: border-box;
     transform: translateY(-529px);
+  }
+}
+
+@keyframes fadeIn_elem{
+  from{
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to{
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes fadeOut_elem{
+  from{
+    opacity:1;
+    visibility: visible;
+  }
+
+  to{
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes lineHeight{
+  from{
+    height:0;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to{
+    height:100%;
+    opacity: 1;
+    visibility: visible;
   }
 }
 

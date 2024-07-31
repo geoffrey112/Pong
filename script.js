@@ -185,22 +185,42 @@ function checkInput(){
 
 function gameLaunch(){
 
-  // Middle line dotted qui descend
-
-  // const line = document.createElement('div');
-  const contentCard = document.getElementsByClassName('contentCard')[0];
-  const title = document.querySelector('h1');
-
-  gameStart = true;
-
-  btnStart.classList.remove('buttonFast', 'buttonHover');
-  btnStart.classList.add('launch');
-  txtStart.classList.add('txtStartFadeOut');
-  title.classList.add('fadeOutElem');
-  contentCard.classList.add('fadeOutElem');
-  btnKey.classList.add('fadeOutElem');
+  if(gameStart === false){
+    const j1Name = inputJ1.value;
+    const j2Name = inputJ2.value;
+    const title = document.querySelector('h1');
+    const contentCard = document.getElementsByClassName('contentCard')[0];
+    const line = document.createElement('div');
+    const contentPlayer = document.createElement('div');
+    const titleJ1 = document.createElement('span');
+    const titleJ2 = document.createElement('span');
+    // let paddleJ1 = new Paddle(80, 150);
+    let paddleJ2 = new Paddle(0, 550);
   
-  
+    gameStart = true;
+    btnStart.classList.remove('buttonFast', 'buttonHover');
+    btnStart.classList.add('launch');
+    txtStart.classList.add('txtStartFadeOut');
+    title.classList.add('fadeOutElem');
+    contentCard.classList.add('fadeOutElem');
+    btnKey.classList.add('fadeOutElem');
+    line.classList.add('lineGame');
+    contentPlayer.classList.add('contentPlayer');
+    titleJ1.classList.add('titleJ1');
+    titleJ2.classList.add('titleJ2');
+    titleJ1.textContent = `${j1Name}: `;
+    titleJ2.textContent = `${j2Name}: `;
+    
+    setTimeout(() => {
+      // paddleJ1.draw();
+      paddleJ2.draw();
+      btnStart.append(contentPlayer);
+      contentPlayer.append(titleJ1);
+      contentPlayer.append(titleJ2);
+      btnStart.append(line);
+    }, 2000);
+    
+  }
 }
 
 
