@@ -387,7 +387,7 @@ input{
     background: radial-gradient(ellipse 90% 20% at 50% 55%, #6085ff 10%, #3057d4 100%);
     background-clip: text;
     color: transparent;
-    animation: 2s 0.5s forwards fadeIn_elem;
+    animation: 2s 0s forwards fadeIn_elem;
     visibility: hidden;
     opacity: 0;
   }
@@ -398,7 +398,7 @@ input{
     background: radial-gradient(ellipse 90% 20% at 50% 55%, #ff7e7e 10%, #d43030 100%);
     background-clip: text;
     color: transparent;
-    animation: 2s 0.5s forwards fadeIn_elem;
+    animation: 2s 0s forwards fadeIn_elem;
     visibility: hidden;
     opacity: 0;
   }
@@ -408,7 +408,18 @@ input{
     height:120px;
     position: absolute;
     background-color: white;
-    animation: 2s 0.5s forwards fadeIn_elem;
+    animation: 2s 0s forwards fadeIn_elem;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .ball{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    position: absolute;
+    background-color: white;
+    animation: 2s 0s forwards fadeIn_elem;
     visibility: hidden;
     opacity: 0;
   }
@@ -471,6 +482,7 @@ input{
   }
 }
 
+/*** Animation startGame ***/
 @keyframes openButtonStart{
   0%{
     width:190px;

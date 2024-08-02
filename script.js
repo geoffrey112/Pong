@@ -194,9 +194,7 @@ function gameLaunch(){
     const contentPlayer = document.createElement('div');
     const titleJ1 = document.createElement('span');
     const titleJ2 = document.createElement('span');
-    // let paddleJ1 = new Paddle(80, 150);
-    let paddleJ2 = new Paddle(0, 550);
-  
+    
     gameStart = true;
     btnStart.classList.remove('buttonFast', 'buttonHover');
     btnStart.classList.add('launch');
@@ -212,13 +210,12 @@ function gameLaunch(){
     titleJ2.textContent = `${j2Name}: `;
     
     setTimeout(() => {
-      // paddleJ1.draw();
-      paddleJ2.draw();
+      let game = new Game();
       btnStart.append(contentPlayer);
       contentPlayer.append(titleJ1);
       contentPlayer.append(titleJ2);
       btnStart.append(line);
-    }, 2000);
+    }, 2200);
     
   }
 }
