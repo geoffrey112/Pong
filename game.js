@@ -17,35 +17,33 @@ class Paddle{
   
   draw(){
     this.paddle.classList.add('paddle');
-    this.updatePosition();
     btnStart.append(this.paddle);
-    
-    window.addEventListener('resize', this.updatePosition.bind(this));
-  }
-
-}
-
-
-class Ball{
-  constructor(x, y){
-    this.x = x;
-    this.y = y;
-    this.ball = document.createElement('div');
-  }
-
-  updatePosition(){
-    this.ball.style.transform = `translate(${this.x}px, ${this.y}px)`;
-  }
-
-  draw(){
-    this.ball.classList.add('ball');
     this.updatePosition();
-    btnStart.append(this.ball);
-
     window.addEventListener('resize', this.updatePosition.bind(this));
   }
-  
+
 }
+
+
+// class Ball{
+//   constructor(x, y){
+//     this.x = x;
+//     this.y = y;
+//     this.ball = document.createElement('div');
+//   }
+
+//   updatePosition(){
+//     this.ball.style.transform = `translate(${this.x}px, ${this.y}px)`;
+//   }
+
+//   draw(){
+//     this.ball.classList.add('ball');
+//     btnStart.append(this.ball);
+//     this.updatePosition();
+//     window.addEventListener('resize', this.updatePosition.bind(this));
+//   }
+  
+// }
 
 
 class Game{
@@ -57,7 +55,9 @@ class Game{
   }
 
   init(){
-    this.addElements(); // TEST (ici startCountdown)
+    this.addElements();
+    this.startCountdown();
+    this.key();
   }
 
   addElements(){
@@ -66,12 +66,72 @@ class Game{
     // this.ball.draw();
   }
 
-  key(){
+  startCountdown(){
+    let txtCount = document.createElement('span');
+    let countDown = 3;
+    let interval;
 
+    setTimeout(() => {
+      txtCount.classList.add('countDown');
+      txtCount.textContent = countDown;
+      btnStart.append(txtCount);
+
+      interval = setInterval(() => {
+        if(countDown > 0){
+          countDown--;
+          txtCount.textContent = countDown;
+        }else{
+          txtCount.remove();
+          clearInterval(interval);
+        }
+      }, 1000);
+    }, 2000);
   }
 
-  startCountdown(){
+  key(){
+    let keyZ = false;
+    let keyS = false;
+    let keyUp = false;
+    let keyDown = false;
 
+    document.addEventListener('keydown', (event) => {
+      if(event.key === 'z' || event.code === 'KeyW'){
+        keyZ = true;
+        // setInterval(() => {
+        //   console.log(keyZ);
+        // },20);
+      }
+      
+      if(event.key === 's' || event.code === 'KeyS'){
+        keyS = true;
+      }
+
+      if(event.key === 'ArrowUp' || event.code === 'ArrowUp'){
+        keyUp = true;
+      }
+
+      if(event.key === 'ArrowDown' || event.code === 'ArrowDown'){
+        keyDown = true;
+      }
+    });
+
+    document.addEventListener('keyup', (event) => {
+      if(event.key === 'z' || event.code === 'KeyW'){
+        keyZ = false;
+      }
+      
+      if(event.key === 's' || event.code === 'KeyS'){
+        keyS = false;
+      }
+
+      if(event.key === 'ArrowUp' || event.code === 'ArrowUp'){
+        keyUp = false;
+      }
+
+      if(event.key === 'ArrowDown' || event.code === 'ArrowDown'){
+        keyDown = false;
+      }
+    });
   }
 
   gameLoop(){

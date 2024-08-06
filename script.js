@@ -195,7 +195,6 @@ function gameLaunch(){
     const titleJ1 = document.createElement('span');
     const titleJ2 = document.createElement('span');
     
-    gameStart = true;
     btnStart.classList.remove('buttonFast', 'buttonHover');
     btnStart.classList.add('launch');
     txtStart.classList.add('txtStartFadeOut');
@@ -210,13 +209,14 @@ function gameLaunch(){
     titleJ2.textContent = `${j2Name}: `;
     
     setTimeout(() => {
-      let game = new Game();
       btnStart.append(contentPlayer);
       contentPlayer.append(titleJ1);
       contentPlayer.append(titleJ2);
       btnStart.append(line);
+      let game = new Game();
     }, 2200);
     
+    gameStart = true;
   }
 }
 

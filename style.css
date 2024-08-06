@@ -143,7 +143,7 @@ input{
   z-index: 0;
 }
 
-.buttonStart > span{
+.txtBtnStart{
   border-radius: 25px;
   border:6px solid transparent;
   text-align: center;
@@ -366,7 +366,8 @@ input{
     height:0;
     border: 4px dashed white;
     border-left:0;
-    margin: auto;
+    position: absolute;
+    margin-left:calc(50vw - 8px);
     box-sizing: border-box;
     animation:2s 0s forwards lineHeight;
     visibility: hidden;
@@ -422,6 +423,16 @@ input{
     animation: 2s 0s forwards fadeIn_elem;
     visibility: hidden;
     opacity: 0;
+  }
+
+  .countDown{
+    width: 100%;
+    text-align: center;
+    color:white;
+    font-size: 200px;
+    background-color: rgba(173, 216, 230, 0.45);
+    position:absolute;
+    margin-top:calc(45vh - 180px);
   }
 
 
