@@ -57,7 +57,6 @@ class Game{
   init(){
     this.addElements();
     this.startCountdown();
-    this.key();
   }
 
   addElements(){
@@ -77,12 +76,13 @@ class Game{
       btnStart.append(txtCount);
 
       interval = setInterval(() => {
-        if(countDown > 0){
+        if(countDown > 1){
           countDown--;
           txtCount.textContent = countDown;
         }else{
           txtCount.remove();
           clearInterval(interval);
+          this.key();
         }
       }, 1000);
     }, 2000);
@@ -100,16 +100,15 @@ class Game{
         // setInterval(() => {
         //   console.log(keyZ);
         // },20);
+
+        // window.requestAnimationFrame();
       }
-      
       if(event.key === 's' || event.code === 'KeyS'){
         keyS = true;
       }
-
       if(event.key === 'ArrowUp' || event.code === 'ArrowUp'){
         keyUp = true;
       }
-
       if(event.key === 'ArrowDown' || event.code === 'ArrowDown'){
         keyDown = true;
       }
@@ -119,15 +118,12 @@ class Game{
       if(event.key === 'z' || event.code === 'KeyW'){
         keyZ = false;
       }
-      
       if(event.key === 's' || event.code === 'KeyS'){
         keyS = false;
       }
-
       if(event.key === 'ArrowUp' || event.code === 'ArrowUp'){
         keyUp = false;
       }
-
       if(event.key === 'ArrowDown' || event.code === 'ArrowDown'){
         keyDown = false;
       }
