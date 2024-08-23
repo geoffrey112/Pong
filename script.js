@@ -34,8 +34,8 @@ document.addEventListener('click', function(e){
 });
 
 // Disable more than 2 spaces
-inputJ1.addEventListener('input', statusSpace);
-inputJ2.addEventListener('input', statusSpace);
+inputJ1.addEventListener('input', inputSpace);
+inputJ2.addEventListener('input', inputSpace);
 
 // Start Game
 btnStart.addEventListener('click', function(){
@@ -142,7 +142,7 @@ function closeKeyBtn(event){
 }
 
 
-function statusSpace(event){
+function inputSpace(event){
 
   const findSpace = /\s{2}/g;
 

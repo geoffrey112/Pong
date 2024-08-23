@@ -1,25 +1,33 @@
 class Paddle{
-  constructor(x, y, id){
-    this.x = x;
-    this.y = y;
+  constructor(posX, posY, moveY, id){
+    this.posX = posX;
+    this.posY = posY;
+    this.moveY = moveY;
     this.id = id;
     this.paddle = document.createElement('div');
+  }
+
+  init(){
+    this.updatePosition();
+    this.draw();
   }
 
   updatePosition(){
 
     if(this.id === 'paddleJ2'){
-      this.x = btnStart.clientWidth - 80;
-    }    
+      this.posX = btnStart.clientWidth - 80;
+    }
 
-    this.paddle.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    this.posY = btnStart.clientHeight / 2 - this.moveY;
+
+    this.paddle.style.transform = `translate(${this.posX}px, ${this.posY}px)`;
   }
   
   draw(){
     this.paddle.classList.add('paddle');
     btnStart.append(this.paddle);
-    this.updatePosition();
     window.addEventListener('resize', this.updatePosition.bind(this));
+    
   }
 
 }
@@ -48,20 +56,22 @@ class Paddle{
 
 class Game{
   constructor(){
-    this.paddleJ1 = new Paddle(80, 150);
-    this.paddleJ2 = new Paddle(btnStart.clientWidth - 80, 550, 'paddleJ2');
+    this.moveJ1Y = 100;
+    this.moveJ2Y = 0;
+    this.keyZ = false;
+    this.keyS = false;
+    this.keyUp = false;
+    this.keyDown = false;
     // this.ball = new Ball();
+    this.paddleJ1 = new Paddle(80, btnStart.clientHeight / 2, this.moveJ1Y, 'paddleJ1');
+    this.paddleJ2 = new Paddle(btnStart.clientWidth - 80, btnStart.clientHeight / 2 - this.moveJ2Y, null, 'paddleJ2');
     this.init();
   }
 
   init(){
-    this.addElements();
+    this.paddleJ1.init();
+    this.paddleJ2.init();
     this.startCountdown();
-  }
-
-  addElements(){
-    this.paddleJ1.draw();
-    this.paddleJ2.draw();
     // this.ball.draw();
   }
 
@@ -83,57 +93,82 @@ class Game{
           txtCount.remove();
           clearInterval(interval);
           this.key();
+          this.gameLoop();
         }
       }, 1000);
     }, 2000);
   }
 
   key(){
-    let keyZ = false;
-    let keyS = false;
-    let keyUp = false;
-    let keyDown = false;
-
     document.addEventListener('keydown', (event) => {
+      // Player 1
       if(event.key === 'z' || event.code === 'KeyW'){
-        keyZ = true;
-        // setInterval(() => {
-        //   console.log(keyZ);
-        // },20);
-
-        // window.requestAnimationFrame();
+        this.keyZ = true;
       }
       if(event.key === 's' || event.code === 'KeyS'){
-        keyS = true;
+        this.keyS = true;
       }
+      // Player 2
       if(event.key === 'ArrowUp' || event.code === 'ArrowUp'){
-        keyUp = true;
+        this.keyUp = true;
       }
       if(event.key === 'ArrowDown' || event.code === 'ArrowDown'){
-        keyDown = true;
+        this.keyDown = true;
       }
     });
 
     document.addEventListener('keyup', (event) => {
       if(event.key === 'z' || event.code === 'KeyW'){
-        keyZ = false;
+        this.keyZ = false;
       }
       if(event.key === 's' || event.code === 'KeyS'){
-        keyS = false;
+        this.keyS = false;
       }
       if(event.key === 'ArrowUp' || event.code === 'ArrowUp'){
-        keyUp = false;
+        this.keyUp = false;
       }
       if(event.key === 'ArrowDown' || event.code === 'ArrowDown'){
-        keyDown = false;
+        this.keyDown = false;
       }
     });
   }
 
-  gameLoop(){
+  move(){
 
+   
+    
+    if(this.keyZ){
+      // this.moveJ1Y = ++this.moveJ1Y;
+      // this.paddleJ1.posY = btnStart.clientHeight / 2 - this.moveJ1Y;
+      // console.log(this.paddleJ1.posY);
+      
+      
+    }
+
+    if(this.keyS){
+      this.moveJ1Y = ++this.moveJ1Y;
+      console.log(this.moveJ1Y);
+    }
+
+    if(this.keyUp){
+      // this.moveJ1Y = --this.moveJ2Y;
+      console.log(this.moveJ2Y);
+    }
+    
+    if(this.keyDown){
+      // this.moveJ1Y = ++this.moveJ2Y;
+      console.log(this.moveJ2Y);
+    }
+
+  }
+  
+  gameLoop(){
+    this.move();
+    this.paddleJ1.updatePosition();
+    // this.paddleJ2.updatePosition();
+
+    window.requestAnimationFrame(this.gameLoop.bind(this));
   }
 
 
 }
-
