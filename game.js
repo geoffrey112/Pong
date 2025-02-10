@@ -1,18 +1,26 @@
 class Paddle{
-  constructor(posX, posY, moveY, id){
-    this.posX = posX;
-    this.posY = posY;
+  constructor(moveY, id){
+    this.posX;
+    this.posY;
     this.moveY = moveY;
     this.id = id;
     this.paddle = document.createElement('div');
   }
 
   init(){
-    this.updatePosition();
     this.draw();
+    this.updatePosition();
+  }
+
+  draw(){
+    this.paddle.classList.add('paddle');
+    btnStart.append(this.paddle);
   }
 
   updatePosition(){
+    if(this.id === 'paddleJ1'){
+      this.posX = 80;
+    }
 
     if(this.id === 'paddleJ2'){
       this.posX = btnStart.clientWidth - 80;
@@ -22,14 +30,6 @@ class Paddle{
 
     this.paddle.style.transform = `translate(${this.posX}px, ${this.posY}px)`;
   }
-  
-  draw(){
-    this.paddle.classList.add('paddle');
-    btnStart.append(this.paddle);
-    window.addEventListener('resize', this.updatePosition.bind(this));
-    
-  }
-
 }
 
 
@@ -56,21 +56,21 @@ class Paddle{
 
 class Game{
   constructor(){
-    this.moveJ1Y = 100;
-    this.moveJ2Y = 0;
     this.keyZ = false;
     this.keyS = false;
     this.keyUp = false;
     this.keyDown = false;
     // this.ball = new Ball();
-    this.paddleJ1 = new Paddle(80, btnStart.clientHeight / 2, this.moveJ1Y, 'paddleJ1');
-    this.paddleJ2 = new Paddle(btnStart.clientWidth - 80, btnStart.clientHeight / 2 - this.moveJ2Y, null, 'paddleJ2');
+    this.paddleJ1 = new Paddle(100, 'paddleJ1');
+    this.paddleJ2 = new Paddle(0, 'paddleJ2');
+    this.requestAnimation;
     this.init();
   }
 
   init(){
     this.paddleJ1.init();
     this.paddleJ2.init();
+    this.gameLoop();
     this.startCountdown();
     // this.ball.draw();
   }
@@ -93,7 +93,6 @@ class Game{
           txtCount.remove();
           clearInterval(interval);
           this.key();
-          this.gameLoop();
         }
       }, 1000);
     }, 2000);
@@ -134,41 +133,32 @@ class Game{
   }
 
   move(){
+    const speed = 5;
 
-   
-    
     if(this.keyZ){
-      // this.moveJ1Y = ++this.moveJ1Y;
-      // this.paddleJ1.posY = btnStart.clientHeight / 2 - this.moveJ1Y;
-      // console.log(this.paddleJ1.posY);
-      
-      
+      this.paddleJ1.moveY += speed;
     }
-
+    
     if(this.keyS){
-      this.moveJ1Y = ++this.moveJ1Y;
-      console.log(this.moveJ1Y);
+      this.paddleJ1.moveY -= speed;
     }
 
     if(this.keyUp){
-      // this.moveJ1Y = --this.moveJ2Y;
-      console.log(this.moveJ2Y);
+      this.paddleJ2.moveY += speed;
     }
     
     if(this.keyDown){
-      // this.moveJ1Y = ++this.moveJ2Y;
-      console.log(this.moveJ2Y);
+      this.paddleJ2.moveY -= speed;
     }
-
   }
   
   gameLoop(){
     this.move();
     this.paddleJ1.updatePosition();
-    // this.paddleJ2.updatePosition();
-
-    window.requestAnimationFrame(this.gameLoop.bind(this));
-  }
+    this.paddleJ2.updatePosition();
+    
+    this.requestAnimation = window.requestAnimationFrame(this.gameLoop.bind(this));
+  } 
 
 
 }

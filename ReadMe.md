@@ -1,1 +1,1 @@
-# The game of retro pong 2 players
+# Retro ping pong for 2 players

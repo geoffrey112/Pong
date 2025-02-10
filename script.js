@@ -37,7 +37,7 @@ document.addEventListener('click', function(e){
 inputJ1.addEventListener('input', inputSpace);
 inputJ2.addEventListener('input', inputSpace);
 
-// Start Game
+// Start Game or error message
 btnStart.addEventListener('click', function(){
   checkInput();
 });
@@ -82,7 +82,6 @@ function openKeyBtn(){
     const keyS = document.createElement('div');
     const keyUp = document.createElement('div');
     const keyDown = document.createElement('div');
-  
   
     btnKey.classList.remove('buttonHover', 'buttonFast');
     setTimeout(() => { containKey.classList.add('containKeyOut'); }, 10); // Short delay to work
